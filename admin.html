@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,116 +12,213 @@
 
 <body>
 
-    <!-- =========================
-         CABEÇALHO
-    ========================== -->
-    <header class="topbar">
+    <!-- ==========================================
+         LOGIN DO PROPRIETÁRIO
+    =========================================== -->
 
-        <div class="brand">
-            <div class="brand-mark">BB</div>
+    <div id="loginScreen" class="modal show">
 
-            <div>
-                <strong>BARBEARIA BLACK</strong>
-                <span>PAINEL DO PROPRIETÁRIO</span>
-            </div>
-        </div>
+        <div class="modal-box">
 
-        <button
-            type="button"
-            id="logoutAdmin"
-            class="secondary-btn"
-        >
-            Sair da Agenda
-        </button>
+            <p class="eyebrow">ÁREA RESTRITA</p>
 
-    </header>
+            <h2>Acesso do proprietário</h2>
+
+            <p>
+                Entre com seu e-mail e senha para acessar
+                a agenda da Barbearia Black.
+            </p>
 
 
-    <!-- =========================
-         ÁREA PRINCIPAL
-    ========================== -->
-    <main>
+            <form id="loginForm">
 
-        <section class="booking-section">
+                <div style="margin-bottom: 15px; text-align: left;">
 
-            <div class="section-heading">
-                <p class="eyebrow">PAINEL</p>
-
-                <h1 style="font-size: clamp(38px, 6vw, 64px);">
-                    Agenda da Barbearia
-                </h1>
-
-                <p class="hero-text">
-                    Consulte e gerencie os agendamentos realizados pelos clientes.
-                </p>
-            </div>
-
-
-            <!-- =========================
-                 AGENDA
-            ========================== -->
-            <div class="booking-card admin-box">
-
-                <div class="admin-date">
-
-                    <label for="adminDate">
-                        Escolha a data
+                    <label for="adminEmail">
+                        E-mail
                     </label>
 
                     <input
-                        type="date"
-                        id="adminDate"
+                        type="email"
+                        id="adminEmail"
+                        placeholder="seu@email.com"
+                        required
                     >
 
                 </div>
 
 
-                <!-- Lista dos agendamentos -->
-                <div
-                    id="adminList"
-                    class="admin-list"
-                >
-                    <p style="color: #a5a5a5;">
-                        Carregando agenda...
-                    </p>
+                <div style="margin-bottom: 20px; text-align: left;">
+
+                    <label for="adminPassword">
+                        Senha
+                    </label>
+
+                    <input
+                        type="password"
+                        id="adminPassword"
+                        placeholder="Sua senha"
+                        required
+                    >
+
                 </div>
 
 
-                <!-- Excluir todos -->
                 <button
-                    type="button"
-                    id="clearAll"
-                    class="secondary-btn"
+                    type="submit"
+                    class="primary-btn"
+                    style="width: 100%;"
                 >
-                    Excluir todos os agendamentos
+                    Entrar na Agenda
                 </button>
+
+
+                <p
+                    id="loginMessage"
+                    style="
+                        display:none;
+                        margin-top:15px;
+                        color:#f28a8a;
+                        font-size:13px;
+                    "
+                ></p>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==========================================
+         PAINEL ADMINISTRATIVO
+    =========================================== -->
+
+    <div id="adminPanel" style="display:none;">
+
+        <!-- CABEÇALHO -->
+
+        <header class="topbar">
+
+            <div class="brand">
+
+                <div class="brand-mark">
+                    BB
+                </div>
+
+                <div>
+
+                    <strong>
+                        BARBEARIA BLACK
+                    </strong>
+
+                    <span>
+                        PAINEL DO PROPRIETÁRIO
+                    </span>
+
+                </div>
 
             </div>
 
-        </section>
 
-    </main>
+            <button
+                type="button"
+                id="logoutAdmin"
+                class="secondary-btn"
+            >
+                Sair da Agenda
+            </button>
+
+        </header>
 
 
-    <!-- =========================
-         RODAPÉ
-    ========================== -->
-    <footer>
-        Barbearia Black — Painel administrativo
-    </footer>
+        <!-- CONTEÚDO -->
+
+        <main>
+
+            <section class="booking-section">
+
+                <div class="section-heading">
+
+                    <p class="eyebrow">
+                        PAINEL
+                    </p>
+
+                    <h1 style="font-size: clamp(38px, 6vw, 64px);">
+                        Agenda da Barbearia
+                    </h1>
+
+                    <p class="hero-text">
+                        Consulte e gerencie os agendamentos
+                        realizados pelos clientes.
+                    </p>
+
+                </div>
 
 
-    <!-- =========================
+                <!-- AGENDA -->
+
+                <div class="booking-card admin-box">
+
+                    <div class="admin-date">
+
+                        <label for="adminDate">
+                            Escolha a data
+                        </label>
+
+                        <input
+                            type="date"
+                            id="adminDate"
+                        >
+
+                    </div>
+
+
+                    <div
+                        id="adminList"
+                        class="admin-list"
+                    >
+                        <p style="color:#a5a5a5;">
+                            Carregando agenda...
+                        </p>
+                    </div>
+
+
+                    <button
+                        type="button"
+                        id="clearAll"
+                        class="secondary-btn"
+                    >
+                        Excluir todos os agendamentos
+                    </button>
+
+                </div>
+
+            </section>
+
+        </main>
+
+
+        <footer>
+            Barbearia Black — Painel administrativo
+        </footer>
+
+    </div>
+
+
+    <!-- ==========================================
          SUPABASE
-    ========================== -->
+    =========================================== -->
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <!--
-        Por enquanto vamos criar o admin.js
-        no próximo passo.
-    -->
+
+    <!-- ==========================================
+         SCRIPT DA ADMINISTRAÇÃO
+    =========================================== -->
+
     <script src="admin.js"></script>
 
 </body>
+
 </html>
