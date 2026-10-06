@@ -965,17 +965,27 @@ async function confirmarAgendamento(event) {
     // SALVAR NO SUPABASE
     // ----------------------------------------------
 
-    const { error } =
-        await db
-            .from("agendamentos")
-        const codigoCancelamento =
+   // ----------------------------------------------
+// GERAR CÓDIGO DE CANCELAMENTO
+// ----------------------------------------------
+
+const codigoCancelamento =
     gerarCodigoCancelamento();
 
 const cancelamentoHash =
     await gerarHash(codigoCancelamento);
-            insert([
-                {
-                     nome: nome,
+
+
+// ----------------------------------------------
+// SALVAR NO SUPABASE
+// ----------------------------------------------
+
+const { error } =
+    await db
+        .from("agendamentos")
+        .insert([
+            {
+                nome: nome,
                 whatsapp: whatsapp,
                 servico: state.service.name,
                 preco: state.service.price,
@@ -983,8 +993,8 @@ const cancelamentoHash =
                 data: state.date,
                 horario: state.time,
                 cancelamento_hash: cancelamentoHash
-                }
-            ]);
+            }
+        ]);
 
 
     if (error) {
