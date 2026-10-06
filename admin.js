@@ -9,11 +9,20 @@ const db = window.supabase.createClient(
 
 
 // ==========================================
-// ELEMENTOS DA PÁGINA
+// ELEMENTOS
 // ==========================================
+
+const loginScreen = document.getElementById("loginScreen");
+const loginForm = document.getElementById("loginForm");
+const adminPanel = document.getElementById("adminPanel");
+
+const adminEmail = document.getElementById("adminEmail");
+const adminPassword = document.getElementById("adminPassword");
+const loginMessage = document.getElementById("loginMessage");
 
 const adminDate = document.getElementById("adminDate");
 const adminList = document.getElementById("adminList");
+
 const logoutAdmin = document.getElementById("logoutAdmin");
 const clearAll = document.getElementById("clearAll");
 
@@ -24,42 +33,181 @@ const clearAll = document.getElementById("clearAll");
 
 document.addEventListener("DOMContentLoaded", async () => {
 
-    // Verifica se o proprietário está logado
     const {
         data: { session }
     } = await db.auth.getSession();
 
-    if (!session) {
-        window.location.href = "index.html";
+
+    if (session) {
+
+        mostrarPainel();
+
+    } else {
+
+        mostrarLogin();
+
+    }
+
+
+    loginForm.addEventListener(
+        "submit",
+        fazerLogin
+    );
+
+
+    logoutAdmin.addEventListener(
+        "click",
+        sairDaAgenda
+    );
+
+
+    adminDate.addEventListener(
+        "change",
+        carregarAgenda
+    );
+
+
+    clearAll.addEventListener(
+        "click",
+        excluirTodos
+    );
+
+});
+
+
+// ==========================================
+// MOSTRAR LOGIN
+// ==========================================
+
+function mostrarLogin() {
+
+    loginScreen.classList.add("show");
+
+    adminPanel.style.display = "none";
+
+}
+
+
+// ==========================================
+// MOSTRAR PAINEL
+// ==========================================
+
+async function mostrarPainel() {
+
+    loginScreen.classList.remove("show");
+
+    adminPanel.style.display = "block";
+
+
+    definirDataHoje();
+
+    await carregarAgenda();
+
+}
+
+
+// ==========================================
+// LOGIN
+// ==========================================
+
+async function fazerLogin(event) {
+
+    event.preventDefault();
+
+
+    const email = adminEmail.value.trim();
+    const senha = adminPassword.value;
+
+
+    loginMessage.style.display = "none";
+
+
+    if (!email || !senha) {
+
+        mostrarMensagemLogin(
+            "Preencha o e-mail e a senha."
+        );
+
         return;
     }
 
 
-    // Define a data de hoje
+    const {
+        data,
+        error
+    } = await db.auth.signInWithPassword({
+        email: email,
+        password: senha
+    });
+
+
+    if (error) {
+
+        console.error(error);
+
+        mostrarMensagemLogin(
+            "E-mail ou senha incorretos."
+        );
+
+        return;
+    }
+
+
+    if (!data.session) {
+
+        mostrarMensagemLogin(
+            "Não foi possível iniciar a sessão."
+        );
+
+        return;
+    }
+
+
+    adminEmail.value = "";
+    adminPassword.value = "";
+
+
+    mostrarPainel();
+
+}
+
+
+// ==========================================
+// MENSAGEM DE LOGIN
+// ==========================================
+
+function mostrarMensagemLogin(mensagem) {
+
+    loginMessage.textContent = mensagem;
+
+    loginMessage.style.display = "block";
+
+}
+
+
+// ==========================================
+// DATA DE HOJE
+// ==========================================
+
+function definirDataHoje() {
+
     const hoje = new Date();
 
     const ano = hoje.getFullYear();
-    const mes = String(hoje.getMonth() + 1).padStart(2, "0");
-    const dia = String(hoje.getDate()).padStart(2, "0");
 
-    adminDate.value = `${ano}-${mes}-${dia}`;
+    const mes = String(
+        hoje.getMonth() + 1
+    ).padStart(2, "0");
 
-
-    // Carrega a agenda
-    await carregarAgenda();
-
-
-    // Quando mudar a data
-    adminDate.addEventListener("change", carregarAgenda);
+    const dia = String(
+        hoje.getDate()
+    ).padStart(2, "0");
 
 
-    // Logout
-    logoutAdmin.addEventListener("click", sairDaAgenda);
+    adminDate.value =
+        `${ano}-${mes}-${dia}`;
 
-
-    // Excluir todos
-    clearAll.addEventListener("click", excluirTodos);
-});
+}
 
 
 // ==========================================
@@ -68,14 +216,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 async function carregarAgenda() {
 
-    const dataSelecionada = adminDate.value;
+    const dataSelecionada =
+        adminDate.value;
+
 
     if (!dataSelecionada) {
+
         adminList.innerHTML = `
             <p style="color:#a5a5a5;">
                 Escolha uma data.
             </p>
         `;
+
         return;
     }
 
@@ -113,7 +265,6 @@ async function carregarAgenda() {
     }
 
 
-    // Nenhum agendamento
     if (!data || data.length === 0) {
 
         adminList.innerHTML = `
@@ -134,43 +285,52 @@ async function carregarAgenda() {
     }
 
 
-    // Renderiza os agendamentos
     adminList.innerHTML = "";
 
 
     data.forEach(agendamento => {
 
-        const item = document.createElement("div");
+        const item =
+            document.createElement("div");
 
-        item.className = "booking-item";
+        item.className =
+            "booking-item";
 
 
         item.innerHTML = `
+
             <strong>
                 ${escaparHTML(agendamento.horario)}
-                — ${escaparHTML(agendamento.nome)}
+                —
+                ${escaparHTML(agendamento.nome)}
             </strong>
 
             <small>
-                Serviço: ${escaparHTML(agendamento.servico)}
+                Serviço:
+                ${escaparHTML(agendamento.servico)}
             </small>
 
             <br>
 
             <small>
-                Barbeiro: ${escaparHTML(agendamento.barbeiro)}
+                Barbeiro:
+                ${escaparHTML(agendamento.barbeiro)}
             </small>
 
             <br>
 
             <small>
-                WhatsApp: ${escaparHTML(agendamento.whatsapp)}
+                WhatsApp:
+                ${escaparHTML(agendamento.whatsapp)}
             </small>
 
             <br>
 
             <small>
-                Valor: R$ ${Number(agendamento.preco).toFixed(2).replace(".", ",")}
+                Valor:
+                R$ ${Number(agendamento.preco)
+                    .toFixed(2)
+                    .replace(".", ",")}
             </small>
 
             <br>
@@ -190,18 +350,21 @@ async function carregarAgenda() {
     });
 
 
-    // Eventos dos botões cancelar
     document
         .querySelectorAll(".cancel-admin")
         .forEach(button => {
 
-            button.addEventListener("click", async () => {
+            button.addEventListener(
+                "click",
+                async () => {
 
-                const id = button.dataset.id;
+                    const id =
+                        button.dataset.id;
 
-                await cancelarAgendamento(id);
+                    await cancelarAgendamento(id);
 
-            });
+                }
+            );
 
         });
 
@@ -209,7 +372,7 @@ async function carregarAgenda() {
 
 
 // ==========================================
-// CANCELAR UM AGENDAMENTO
+// CANCELAR AGENDAMENTO
 // ==========================================
 
 async function cancelarAgendamento(id) {
@@ -262,7 +425,7 @@ async function excluirTodos() {
 
     const confirmar = confirm(
         "ATENÇÃO!\n\n" +
-        "Isso excluirá TODOS os agendamentos da barbearia.\n\n" +
+        "Isso excluirá TODOS os agendamentos.\n\n" +
         "Deseja realmente continuar?"
     );
 
@@ -321,18 +484,21 @@ async function sairDaAgenda() {
 
     await db.auth.signOut();
 
-    window.location.href = "index.html";
+    mostrarLogin();
 
 }
 
 
 // ==========================================
-// SEGURANÇA — ESCAPAR HTML
+// PROTEÇÃO CONTRA HTML INJETADO
 // ==========================================
 
 function escaparHTML(valor) {
 
-    if (valor === null || valor === undefined) {
+    if (
+        valor === null ||
+        valor === undefined
+    ) {
         return "";
     }
 
