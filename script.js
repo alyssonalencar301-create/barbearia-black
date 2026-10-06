@@ -774,6 +774,55 @@ async function renderTimes() {
 
 }
 
+// ======================================================
+// CÓDIGO DE CANCELAMENTO
+// ======================================================
+
+function gerarCodigoCancelamento() {
+
+    const caracteres =
+        "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+    const valores =
+        new Uint32Array(8);
+
+    crypto.getRandomValues(valores);
+
+    let codigo = "";
+
+    for (let i = 0; i < valores.length; i++) {
+
+        codigo +=
+            caracteres[
+                valores[i] % caracteres.length
+            ];
+
+    }
+
+    return codigo;
+}
+
+
+async function gerarHash(texto) {
+
+    const dados =
+        new TextEncoder().encode(texto);
+
+    const hash =
+        await crypto.subtle.digest(
+            "SHA-256",
+            dados
+        );
+
+    return Array
+        .from(new Uint8Array(hash))
+        .map(function (byte) {
+            return byte
+                .toString(16)
+                .padStart(2, "0");
+        })
+        .join("");
+}
 
 // ======================================================
 // CONFIRMAR AGENDAMENTO
@@ -917,15 +966,21 @@ async function confirmarAgendamento(event) {
     const { error } =
         await db
             .from("agendamentos")
+        const codigoCancelamento =
+    gerarCodigoCancelamento();
+
+const cancelamentoHash =
+    await gerarHash(codigoCancelamento);
             .insert([
                 {
-                    nome: nome,
-                    whatsapp: whatsapp,
-                    servico: state.service.name,
-                    preco: state.service.price,
-                    barbeiro: state.barber,
-                    data: state.date,
-                    horario: state.time
+                     nome: nome,
+                whatsapp: whatsapp,
+                servico: state.service.name,
+                preco: state.service.price,
+                barbeiro: state.barber,
+                data: state.date,
+                horario: state.time,
+                cancelamento_hash: cancelamentoHash
                 }
             ]);
 
@@ -957,6 +1012,45 @@ async function confirmarAgendamento(event) {
 
 
     successText.innerHTML = `
+    <strong>
+        ${state.service.name}
+    </strong>
+
+    <br>
+
+    ${formatDate(state.date)}
+    às
+    ${state.time}
+
+    <br>
+
+    ${state.barber}
+    ·
+    ${nome}
+
+    <br><br>
+
+    <strong>
+        Código de cancelamento
+    </strong>
+
+    <br>
+
+    <span style="
+        font-size: 22px;
+        letter-spacing: 3px;
+        font-weight: bold;
+    ">
+        ${codigoCancelamento}
+    </span>
+
+    <br><br>
+
+    <small>
+        Guarde este código.
+        Ele será necessário para cancelar seu agendamento.
+    </small>
+`;
         <strong>
             ${state.service.name}
         </strong>
