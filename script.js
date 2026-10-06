@@ -973,7 +973,7 @@ async function confirmarAgendamento(event) {
 
 const cancelamentoHash =
     await gerarHash(codigoCancelamento);
-            insert([
+            .insert([
                 {
                      nome: nome,
                 whatsapp: whatsapp,
