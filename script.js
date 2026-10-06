@@ -1025,29 +1025,59 @@ async function confirmarAgendamento(event) {
 // ======================================================
 
 function configurarAdmin() {
+  const openAdmin = document.getElementById("openAdmin");
+  const closeAdmin = document.getElementById("closeAdmin");
+  const adminModal = document.getElementById("adminModal");
+  const adminDate = document.getElementById("adminDate");
+    const loginModal = document.getElementById("loginModal");
+const closeLogin = document.getElementById("closeLogin");
+const loginForm = document.getElementById("loginForm");
+const loginEmail = document.getElementById("loginEmail");
+const loginPassword = document.getElementById("loginPassword");
+const loginMessage = document.getElementById("loginMessage");
+// 🔐 PROTEÇÃO DA AGENDA
+  if (openAdmin) {
+      openAdmin.addEventListener("click", function () {
+    loginModal.classList.add("show");
+    loginEmail.focus();
+  });
+}
+    if (closeLogin) {
+  closeLogin.addEventListener("click", function () {
+    loginModal.classList.remove("show");
+  });
+}
 
-    if (openAdmin) {
+if (loginForm) {
+  loginForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
 
-    openAdmin.addEventListener(
-        "click",
-        function () {
+    loginMessage.textContent = "Entrando...";
 
-            const senha = prompt("Digite a senha para acessar a Agenda:");
+    const email = loginEmail.value.trim();
+    const password = loginPassword.value;
 
-            if (senha !== "Black@2026") {
-                alert("Senha incorreta.");
-                return;
-            }
+    const { data, error } = await db.auth.signInWithPassword({
+      email: email,
+      password: password
+    });
 
-            adminModal.classList.add("show");
+    if (error) {
+      console.error(error);
+      loginMessage.textContent = "E-mail ou senha incorretos.";
+      return;
+    }
 
-            configurarDataAdmin();
+    loginMessage.textContent = "";
 
-            carregarAgenda();
+    loginForm.reset();
+    loginModal.classList.remove("show");
 
-        }
-    );
+    adminModal.classList.add("show");
 
+    configurarDataAdmin();
+    carregarAgenda();
+  });
 }
 
 
