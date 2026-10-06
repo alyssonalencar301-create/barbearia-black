@@ -807,6 +807,10 @@ function gerarCodigoCancelamento() {
 
 async function gerarHash(texto) {
 
+    texto = texto
+        .trim()
+        .toUpperCase();
+
     const dados =
         new TextEncoder().encode(texto);
 
