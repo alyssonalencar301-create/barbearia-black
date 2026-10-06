@@ -1198,7 +1198,10 @@ async function carregarAgenda() {
         </p>
     `;
 
+const { data: sessionData } = await db.auth.getSession();
 
+console.log("Sessão do administrador:", sessionData);
+    
     const { data: agendamentos, error } =
         await db
             .from("agendamentos")
