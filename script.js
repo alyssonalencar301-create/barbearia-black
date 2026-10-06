@@ -1053,23 +1053,7 @@ const cancelamentoHash =
         Ele será necessário para cancelar seu agendamento.
     </small>
 `;
-        <strong>
-            ${state.service.name}
-        </strong>
-        <br>
-
-        ${formatDate(state.date)}
-        às
-        ${state.time}
-
-        <br>
-
-        ${state.barber}
-        ·
-        ${nome}
-    `;
-
-
+        
     document
         .getElementById("successModal")
         .classList.add("show");
