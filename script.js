@@ -103,6 +103,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     configurarAdmin();
 
+    configurarCancelamento();
+
 });
 
 
@@ -1187,6 +1189,139 @@ function configurarAdmin() {
     });
   }
 
+// ======================================================
+// CANCELAMENTO PELO CLIENTE
+// ======================================================
+
+function configurarCancelamento() {
+
+    const openCancel =
+        document.getElementById("openCancel");
+
+    const closeCancel =
+        document.getElementById("closeCancel");
+
+    const cancelModal =
+        document.getElementById("cancelModal");
+
+    const cancelForm =
+        document.getElementById("cancelForm");
+
+    const cancelCode =
+        document.getElementById("cancelCode");
+
+    const cancelMessage =
+        document.getElementById("cancelMessage");
+
+
+    if (openCancel) {
+
+        openCancel.addEventListener(
+            "click",
+            function () {
+
+                cancelModal.classList.add("show");
+
+                cancelCode.focus();
+
+            }
+        );
+
+    }
+
+
+    if (closeCancel) {
+
+        closeCancel.addEventListener(
+            "click",
+            function () {
+
+                cancelModal.classList.remove("show");
+
+            }
+        );
+
+    }
+
+
+    if (cancelForm) {
+
+        cancelForm.addEventListener(
+            "submit",
+            async function (event) {
+
+                event.preventDefault();
+
+                const codigo =
+                    cancelCode.value
+                        .trim()
+                        .toUpperCase();
+
+
+                if (codigo.length !== 8) {
+
+                    cancelMessage.textContent =
+                        "Digite um código válido.";
+
+                    return;
+
+                }
+
+
+                cancelMessage.textContent =
+                    "Cancelando...";
+
+
+                const { data, error } =
+                    await db.rpc(
+                        "cancelar_agendamento",
+                        {
+                            p_codigo: codigo
+                        }
+                    );
+
+
+                if (error) {
+
+                    console.error(
+                        "Erro ao cancelar:",
+                        error
+                    );
+
+                    cancelMessage.textContent =
+                        "Não foi possível cancelar o agendamento.";
+
+                    return;
+
+                }
+
+
+                if (!data) {
+
+                    cancelMessage.textContent =
+                        "Código inválido ou agendamento já cancelado.";
+
+                    return;
+
+                }
+
+
+                cancelMessage.textContent =
+                    "Agendamento cancelado com sucesso!";
+
+
+                cancelForm.reset();
+
+
+                await renderTimes();
+
+            }
+
+        );
+
+    }
+
+}
 
   // FECHAR AGENDA
   if (closeAdmin) {
