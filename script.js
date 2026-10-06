@@ -1369,7 +1369,10 @@ async function limparAgendamentos() {
 
     const confirmar =
         confirm(
-            "Tem certeza que deseja apagar todos os agendamentos?"
+            "ATENÇÃO!\n\n" +
+  "Isso irá excluir TODOS os agendamentos da barbearia.\n\n" +
+  "Essa ação não pode ser desfeita.\n\n" +
+  "Deseja realmente continuar?"
         );
 
 
