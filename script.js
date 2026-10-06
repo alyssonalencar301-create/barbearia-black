@@ -1024,105 +1024,131 @@ async function confirmarAgendamento(event) {
 // ======================================================
 
 function configurarAdmin() {
+
   const openAdmin = document.getElementById("openAdmin");
   const closeAdmin = document.getElementById("closeAdmin");
   const adminModal = document.getElementById("adminModal");
   const adminDate = document.getElementById("adminDate");
-    const loginModal = document.getElementById("loginModal");
-const closeLogin = document.getElementById("closeLogin");
-const loginForm = document.getElementById("loginForm");
-const loginEmail = document.getElementById("loginEmail");
-const loginPassword = document.getElementById("loginPassword");
-const loginMessage = document.getElementById("loginMessage");
-// 🔐 PROTEÇÃO DA AGENDA
+
+  const loginModal = document.getElementById("loginModal");
+  const closeLogin = document.getElementById("closeLogin");
+  const loginForm = document.getElementById("loginForm");
+  const loginEmail = document.getElementById("loginEmail");
+  const loginPassword = document.getElementById("loginPassword");
+  const loginMessage = document.getElementById("loginMessage");
+
+  const logoutAdmin = document.getElementById("logoutAdmin");
+
+
+  // ABRIR LOGIN
   if (openAdmin) {
-      openAdmin.addEventListener("click", function () {
-    loginModal.classList.add("show");
-    loginEmail.focus();
-  });
-}
-    if (closeLogin) {
-  closeLogin.addEventListener("click", function () {
-    loginModal.classList.remove("show");
-  });
-}
-
-if (loginForm) {
-  loginForm.addEventListener("submit", async function (event) {
-    event.preventDefault();
-
-    loginMessage.textContent = "Entrando...";
-
-    const email = loginEmail.value.trim();
-    const password = loginPassword.value;
-
-    const { data, error } = await db.auth.signInWithPassword({
-      email: email,
-      password: password
+    openAdmin.addEventListener("click", function () {
+      loginModal.classList.add("show");
+      loginEmail.focus();
     });
+  }
 
-    if (error) {
-      console.error(error);
-      loginMessage.textContent = "E-mail ou senha incorretos.";
-      return;
-    }
 
-    loginMessage.textContent = "";
+  // FECHAR LOGIN
+  if (closeLogin) {
+    closeLogin.addEventListener("click", function () {
+      loginModal.classList.remove("show");
+    });
+  }
 
-    loginForm.reset();
-    loginModal.classList.remove("show");
 
-    adminModal.classList.add("show");
+  // LOGIN
+  if (loginForm) {
+    loginForm.addEventListener("submit", async function (event) {
 
-    configurarDataAdmin();
-    carregarAgenda();
-  });
+      event.preventDefault();
+
+      loginMessage.textContent = "Entrando...";
+
+      const email = loginEmail.value.trim();
+      const password = loginPassword.value;
+
+      const { data, error } =
+        await db.auth.signInWithPassword({
+          email: email,
+          password: password
+        });
+
+      if (error) {
+        console.error(error);
+        loginMessage.textContent =
+          "E-mail ou senha incorretos.";
+        return;
+      }
+
+      loginMessage.textContent = "";
+
+      loginForm.reset();
+      loginModal.classList.remove("show");
+
+      adminModal.classList.add("show");
+
+      configurarDataAdmin();
+      carregarAgenda();
+    });
+  }
+
+
+  // FECHAR AGENDA
+  if (closeAdmin) {
+    closeAdmin.addEventListener("click", function () {
+      adminModal.classList.remove("show");
+    });
+  }
+
+
+  // SAIR
+  if (logoutAdmin) {
+    logoutAdmin.addEventListener("click", async function () {
+
+      const confirmar = confirm(
+        "Deseja realmente sair da Agenda?"
+      );
+
+      if (!confirmar) {
+        return;
+      }
+
+      const { error } = await db.auth.signOut();
+
+      if (error) {
+        console.error("Erro ao sair:", error);
+        alert("Não foi possível sair.");
+        return;
+      }
+
+      adminModal.classList.remove("show");
+
+      alert("Você saiu da Agenda.");
+    });
+  }
+
+
+  // DATA
+  if (adminDate) {
+    adminDate.addEventListener(
+      "change",
+      carregarAgenda
+    );
+  }
+
+
+  // LIMPAR AGENDAMENTOS
+  const clearAll =
+    document.getElementById("clearAll");
+
+  if (clearAll) {
+    clearAll.addEventListener(
+      "click",
+      limparAgendamentos
+    );
+  }
 }
-
-
-    if (closeAdmin) {
-
-        closeAdmin.addEventListener(
-            "click",
-            function () {
-
-                adminModal.classList.remove(
-                    "show"
-                );
-
-            }
-        );
-
-    }
-
-
-    if (adminDate) {
-
-        adminDate.addEventListener(
-            "change",
-            carregarAgenda
-        );
-
-    }
-
-
-    const clearAll =
-        document.getElementById(
-            "clearAll"
-        );
-
-
-    if (clearAll) {
-
-        clearAll.addEventListener(
-            "click",
-            limparAgendamentos
-        );
-
-    }
-
-}
-
 
 // ======================================================
 // DATA DO ADMIN
