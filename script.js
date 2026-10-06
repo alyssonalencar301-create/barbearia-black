@@ -980,7 +980,8 @@ const cancelamentoHash =
 // ----------------------------------------------
 // SALVAR NO SUPABASE
 // ----------------------------------------------
-
+console.log("CÓDIGO FINAL:", codigoCancelamento);
+console.log("HASH FINAL ENVIADO:", cancelamentoHash);
 const { error } =
     await db
         .from("agendamentos")
