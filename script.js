@@ -807,27 +807,24 @@ function gerarCodigoCancelamento() {
 
 async function gerarHash(texto) {
 
-    texto = texto
-        .trim()
-        .toUpperCase();
+    const dados = new TextEncoder().encode(texto);
 
-    const dados =
-        new TextEncoder().encode(texto);
+    const hash = await crypto.subtle.digest(
+        "SHA-256",
+        dados
+    );
 
-    const hash =
-        await crypto.subtle.digest(
-            "SHA-256",
-            dados
-        );
-
-    return Array
+    const resultado = Array
         .from(new Uint8Array(hash))
-        .map(function (byte) {
-            return byte
-                .toString(16)
-                .padStart(2, "0");
-        })
+        .map(byte =>
+            byte.toString(16).padStart(2, "0")
+        )
         .join("");
+
+    console.log("TEXTO HASH:", texto);
+    console.log("HASH GERADO:", resultado);
+
+    return resultado;
 }
 
 // ======================================================
