@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Barbearia Black | Agendamento</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">BB</div>
+      <div>
+        <strong>BARBEARIA BLACK</strong>
+        <span>Estilo que marca presença</span>
+      </div>
+    </div>
+    <button class="admin-link" id="openAdmin">Agenda</button>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <p class="eyebrow">BARBEARIA BLACK</p>
+        <h1>Seu estilo.<br><span>Seu horário.</span></h1>
+        <p class="hero-text">Escolha o serviço, o barbeiro e o melhor horário. Seu agendamento fica confirmado em poucos passos.</p>
+        <a href="#agendamento" class="primary-btn">Agendar agora</a>
+      </div>
+      <div class="hero-card">
+        <div class="hero-icon">✂</div>
+        <p>SEG — SÁB</p>
+        <strong>08:00 — 19:00</strong>
+        <small>Atendimento com hora marcada</small>
+      </div>
+    </section>
+
+    <section class="services-section">
+      <div class="section-heading">
+        <p class="eyebrow">NOSSOS SERVIÇOS</p>
+        <h2>Escolha seu atendimento</h2>
+      </div>
+      <div class="services-grid" id="servicesGrid"></div>
+    </section>
+
+    <section class="booking-section" id="agendamento">
+      <div class="section-heading">
+        <p class="eyebrow">AGENDAMENTO</p>
+        <h2>Reserve seu horário</h2>
+      </div>
+
+      <div class="booking-layout">
+        <div class="steps">
+          <div class="step active" data-step="1"><span>1</span><div><b>Serviço</b><small>O que você deseja?</small></div></div>
+          <div class="step" data-step="2"><span>2</span><div><b>Barbeiro e data</b><small>Escolha quando e com quem</small></div></div>
+          <div class="step" data-step="3"><span>3</span><div><b>Seus dados</b><small>Finalize a reserva</small></div></div>
+        </div>
+
+        <form id="bookingForm" class="booking-card">
+          <div class="form-step visible" id="step1">
+            <label>Serviço</label>
+            <div class="option-grid" id="serviceOptions"></div>
+            <button type="button" class="primary-btn next-btn" data-next="2">Continuar</button>
+          </div>
+
+          <div class="form-step" id="step2">
+            <div class="two-cols">
+              <div>
+                <label for="barber">Barbeiro</label>
+                <select id="barber" required>
+                  <option value="">Selecione</option>
+                  <option>João</option>
+                  <option>Pedro</option>
+                </select>
+              </div>
+              <div>
+                <label for="date">Data</label>
+                <input type="date" id="date" required>
+              </div>
+            </div>
+            <label>Horários disponíveis</label>
+            <div class="times" id="times"></div>
+            <div class="step-actions">
+              <button type="button" class="secondary-btn back-btn" data-back="1">Voltar</button>
+              <button type="button" class="primary-btn next-btn" data-next="3">Continuar</button>
+            </div>
+          </div>
+
+          <div class="form-step" id="step3">
+            <div class="summary" id="summary"></div>
+            <div class="two-cols">
+              <div>
+                <label for="name">Seu nome</label>
+                <input type="text" id="name" placeholder="Ex.: Carlos Silva" required>
+              </div>
+              <div>
+                <label for="phone">WhatsApp</label>
+                <input type="tel" id="phone" placeholder="(87) 99999-9999" required>
+              </div>
+            </div>
+            <div class="step-actions">
+              <button type="button" class="secondary-btn back-btn" data-back="2">Voltar</button>
+              <button type="submit" class="primary-btn">Confirmar agendamento</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div><span>📍</span><b>Localização</b><p>Rua Principal, 100 — Centro</p></div>
+      <div><span>🕐</span><b>Funcionamento</b><p>Segunda a sábado, 08h às 19h</p></div>
+      <div><span>💬</span><b>Contato</b><p>WhatsApp (87) 99999-9999</p></div>
+    </section>
+  </main>
+
+  <footer>© 2026 Barbearia Black · Todos os direitos reservados</footer>
+
+  <div class="modal" id="successModal">
+    <div class="modal-box">
+      <div class="success-icon">✓</div>
+      <h2>Agendamento confirmado!</h2>
+      <p id="successText"></p>
+      <button class="primary-btn" id="closeSuccess">Perfeito</button>
+    </div>
+  </div>
+
+  <div class="modal" id="adminModal">
+    <div class="modal-box admin-box">
+      <button class="close-modal" id="closeAdmin">×</button>
+      <p class="eyebrow">PAINEL</p>
+      <h2>Agenda da barbearia</h2>
+      <div class="admin-date">
+        <label for="adminDate">Escolha a data</label>
+        <input type="date" id="adminDate">
+      </div>
+      <div id="adminList" class="admin-list"></div>
+      <button class="secondary-btn" id="clearAll">Limpar todos os agendamentos deste navegador</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
