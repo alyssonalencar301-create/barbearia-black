@@ -1183,6 +1183,63 @@ function configurarAdmin() {
     });
   }
 
+
+
+  // FECHAR AGENDA
+  if (closeAdmin) {
+    closeAdmin.addEventListener("click", function () {
+      adminModal.classList.remove("show");
+    });
+  }
+
+
+  // SAIR
+  if (logoutAdmin) {
+    logoutAdmin.addEventListener("click", async function () {
+
+      const confirmar = confirm(
+        "Deseja realmente sair da Agenda?"
+      );
+
+      if (!confirmar) {
+        return;
+      }
+
+      const { error } = await db.auth.signOut();
+
+      if (error) {
+        console.error("Erro ao sair:", error);
+        alert("Não foi possível sair.");
+        return;
+      }
+
+      adminModal.classList.remove("show");
+
+      alert("Você saiu da Agenda.");
+    });
+  }
+
+
+  // DATA
+  if (adminDate) {
+    adminDate.addEventListener(
+      "change",
+      carregarAgenda
+    );
+  }
+
+
+  // LIMPAR AGENDAMENTOS
+  const clearAll =
+    document.getElementById("clearAll");
+
+  if (clearAll) {
+    clearAll.addEventListener(
+      "click",
+      limparAgendamentos
+    );
+  }
+}
 // ======================================================
 // CANCELAMENTO PELO CLIENTE
 // ======================================================
@@ -1306,7 +1363,6 @@ function configurarCancelamento() {
 
                 cancelForm.reset();
 
-
                 await renderTimes();
 
             }
@@ -1316,63 +1372,6 @@ function configurarCancelamento() {
     }
 
 }
-
-  // FECHAR AGENDA
-  if (closeAdmin) {
-    closeAdmin.addEventListener("click", function () {
-      adminModal.classList.remove("show");
-    });
-  }
-
-
-  // SAIR
-  if (logoutAdmin) {
-    logoutAdmin.addEventListener("click", async function () {
-
-      const confirmar = confirm(
-        "Deseja realmente sair da Agenda?"
-      );
-
-      if (!confirmar) {
-        return;
-      }
-
-      const { error } = await db.auth.signOut();
-
-      if (error) {
-        console.error("Erro ao sair:", error);
-        alert("Não foi possível sair.");
-        return;
-      }
-
-      adminModal.classList.remove("show");
-
-      alert("Você saiu da Agenda.");
-    });
-  }
-
-
-  // DATA
-  if (adminDate) {
-    adminDate.addEventListener(
-      "change",
-      carregarAgenda
-    );
-  }
-
-
-  // LIMPAR AGENDAMENTOS
-  const clearAll =
-    document.getElementById("clearAll");
-
-  if (clearAll) {
-    clearAll.addEventListener(
-      "click",
-      limparAgendamentos
-    );
-  }
-}
-
 // ======================================================
 // DATA DO ADMIN
 // ======================================================
