@@ -1,10 +1,22 @@
 // ======================================================
-// CONFIGURAÇÃO DO SUPABASE
+// BARBEARIA BLACK - SCRIPT PRINCIPAL
 // ======================================================
+
+// ------------------------------------------------------
+// CONFIGURAÇÃO DO SUPABASE
+// ------------------------------------------------------
 
 const SUPABASE_URL = "https://dtdkibatvmxgwvscwbeo.supabase.co/rest/v1/";
 const SUPABASE_KEY = "sb_publishable_mOTfnwk-9tOMCbYjno7giA_T8GBoe4u";
 
+
+// Verifica se o Supabase foi carregado
+if (!window.supabase) {
+    console.error("Supabase não foi carregado.");
+    alert("Erro ao carregar o sistema. Recarregue a página.");
+}
+
+// Cria conexão com o Supabase
 const db = window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_KEY
@@ -12,31 +24,69 @@ const db = window.supabase.createClient(
 
 
 // ======================================================
-// CONFIGURAÇÕES DA BARBEARIA
+// SERVIÇOS
 // ======================================================
 
-const servicos = {
-    "Corte": 30,
-    "Barba": 20,
-    "Corte + Barba": 45
+const SERVICES = [
+    {
+        id: "corte",
+        name: "Corte",
+        description: "Corte tradicional ou moderno",
+        price: 30
+    },
+    {
+        id: "barba",
+        name: "Barba",
+        description: "Barba completa e acabamento",
+        price: 20
+    },
+    {
+        id: "corte-barba",
+        name: "Corte + Barba",
+        description: "O combo completo",
+        price: 45
+    }
+];
+
+
+// ======================================================
+// CONFIGURAÇÕES DE HORÁRIO
+// ======================================================
+
+const OPEN_HOUR = 8;
+const CLOSE_HOUR = 19;
+const INTERVAL = 30;
+
+
+// ======================================================
+// ESTADO DO AGENDAMENTO
+// ======================================================
+
+let state = {
+    service: null,
+    barber: "",
+    date: "",
+    time: ""
 };
 
-const barbeiros = ["João", "Pedro"];
-
-const inicio = 8;
-const fim = 19;
-const intervalo = 30;
-
 
 // ======================================================
-// ELEMENTOS DA PÁGINA
+// ELEMENTOS
 // ======================================================
 
-const form = document.getElementById("bookingForm");
-const dataInput = document.getElementById("data");
-const barbeiroSelect = document.getElementById("barbeiro");
-const horarioSelect = document.getElementById("horario");
-const servicoSelect = document.getElementById("servico");
+const serviceOptions = document.getElementById("serviceOptions");
+const servicesGrid = document.getElementById("servicesGrid");
+
+const barberInput = document.getElementById("barber");
+const dateInput = document.getElementById("date");
+const timesContainer = document.getElementById("times");
+
+const bookingForm = document.getElementById("bookingForm");
+
+const nameInput = document.getElementById("name");
+const phoneInput = document.getElementById("phone");
+
+const summary = document.getElementById("summary");
 
 
 // ======================================================
@@ -44,329 +94,470 @@ const servicoSelect = document.getElementById("servico");
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", function () {
-    configurarDataMinima();
-    carregarHorarios();
-    configurarFormulario();
+
+    renderServices();
+
+    configurarData();
+
+    configurarEventos();
+
     configurarAdmin();
+
 });
 
 
 // ======================================================
-// DATA MÍNIMA
+// RENDERIZAR SERVIÇOS
 // ======================================================
 
-function configurarDataMinima() {
-    if (!dataInput) return;
+function renderServices() {
+
+    // ----------------------------------------------
+    // CARDS DOS SERVIÇOS
+    // ----------------------------------------------
+
+    if (servicesGrid) {
+
+        servicesGrid.innerHTML = SERVICES.map(function (service, index) {
+
+            return `
+                <div class="service-card">
+
+                    <span class="number">
+                        0${index + 1}
+                    </span>
+
+                    <h3>
+                        ${service.name}
+                    </h3>
+
+                    <p>
+                        ${service.description}
+                    </p>
+
+                    <div class="price">
+                        R$ ${formatPrice(service.price)}
+                    </div>
+
+                </div>
+            `;
+
+        }).join("");
+
+    }
+
+
+    // ----------------------------------------------
+    // OPÇÕES PARA O AGENDAMENTO
+    // ----------------------------------------------
+
+    if (serviceOptions) {
+
+        serviceOptions.innerHTML = SERVICES.map(function (service) {
+
+            return `
+                <button
+                    type="button"
+                    class="option"
+                    data-service="${service.id}"
+                >
+
+                    <div>
+                        <b>${service.name}</b>
+
+                        <small>
+                            ${service.description}
+                        </small>
+                    </div>
+
+                    <strong>
+                        R$ ${formatPrice(service.price)}
+                    </strong>
+
+                </button>
+            `;
+
+        }).join("");
+
+
+        // ------------------------------------------
+        // EVENTO DE CLIQUE NOS SERVIÇOS
+        // ------------------------------------------
+
+        document.querySelectorAll("[data-service]").forEach(function (button) {
+
+            button.addEventListener("click", function () {
+
+                const serviceId = button.dataset.service;
+
+                state.service = SERVICES.find(function (service) {
+                    return service.id === serviceId;
+                });
+
+
+                // Remove seleção anterior
+                document
+                    .querySelectorAll("[data-service]")
+                    .forEach(function (item) {
+                        item.classList.remove("selected");
+                    });
+
+
+                // Seleciona o atual
+                button.classList.add("selected");
+
+            });
+
+        });
+
+    }
+
+}
+
+
+// ======================================================
+// FORMATAR PREÇO
+// ======================================================
+
+function formatPrice(value) {
+
+    return Number(value)
+        .toFixed(2)
+        .replace(".", ",");
+
+}
+
+
+// ======================================================
+// CONFIGURAR DATA
+// ======================================================
+
+function configurarData() {
+
+    if (!dateInput) return;
+
 
     const hoje = new Date();
 
     const ano = hoje.getFullYear();
-    const mes = String(hoje.getMonth() + 1).padStart(2, "0");
-    const dia = String(hoje.getDate()).padStart(2, "0");
 
-    dataInput.min = `${ano}-${mes}-${dia}`;
+    const mes = String(
+        hoje.getMonth() + 1
+    ).padStart(2, "0");
+
+    const dia = String(
+        hoje.getDate()
+    ).padStart(2, "0");
+
+
+    const dataAtual =
+        `${ano}-${mes}-${dia}`;
+
+
+    dateInput.min = dataAtual;
+
+    dateInput.value = dataAtual;
+
+    state.date = dataAtual;
+
 }
 
 
 // ======================================================
-// GERAR HORÁRIOS
+// EVENTOS
 // ======================================================
 
-function gerarHorarios() {
-    const horarios = [];
-
-    for (let hora = inicio; hora < fim; hora++) {
-        horarios.push(`${String(hora).padStart(2, "0")}:00`);
-        horarios.push(`${String(hora).padStart(2, "0")}:30`);
-    }
-
-    return horarios;
-}
+function configurarEventos() {
 
 
-// ======================================================
-// CARREGAR HORÁRIOS DISPONÍVEIS
-// ======================================================
+    // ----------------------------------------------
+    // BARBEIRO
+    // ----------------------------------------------
 
-async function carregarHorarios() {
+    if (barberInput) {
 
-    if (!horarioSelect) return;
+        barberInput.addEventListener(
+            "change",
+            function () {
 
-    horarioSelect.innerHTML =
-        '<option value="">Selecione um horário</option>';
+                state.barber =
+                    barberInput.value;
 
-    if (!dataInput || !dataInput.value) {
-        return;
-    }
+                state.time = "";
 
-    if (!barbeiroSelect || !barbeiroSelect.value) {
-        return;
-    }
+                renderTimes();
 
-    const data = dataInput.value;
-    const barbeiro = barbeiroSelect.value;
-
-    try {
-
-        const { data: agendamentos, error } = await db
-            .from("agendamentos")
-            .select("horario")
-            .eq("data", data)
-            .eq("barbeiro", barbeiro);
-
-        if (error) {
-            console.error("Erro ao buscar horários:", error);
-            mostrarErro("Não foi possível carregar os horários.");
-            return;
-        }
-
-        const ocupados = (agendamentos || []).map(function (item) {
-            return item.horario.substring(0, 5);
-        });
-
-        const horarios = gerarHorarios();
-
-        horarios.forEach(function (horario) {
-
-            const option = document.createElement("option");
-
-            option.value = horario;
-            option.textContent = horario;
-
-            if (ocupados.includes(horario)) {
-                option.disabled = true;
-                option.textContent = `${horario} - Indisponível`;
             }
-
-            horarioSelect.appendChild(option);
-        });
-
-    } catch (erro) {
-
-        console.error("Erro inesperado:", erro);
-        mostrarErro("Ocorreu um erro ao carregar os horários.");
+        );
 
     }
-}
 
 
-// ======================================================
-// ATUALIZAR HORÁRIOS QUANDO DATA OU BARBEIRO MUDAR
-// ======================================================
+    // ----------------------------------------------
+    // DATA
+    // ----------------------------------------------
 
-if (dataInput) {
-    dataInput.addEventListener("change", carregarHorarios);
-}
+    if (dateInput) {
 
-if (barbeiroSelect) {
-    barbeiroSelect.addEventListener("change", carregarHorarios);
-}
+        dateInput.addEventListener(
+            "change",
+            function () {
 
+                state.date =
+                    dateInput.value;
 
-// ======================================================
-// FORMULÁRIO DE AGENDAMENTO
-// ======================================================
+                state.time = "";
 
-function configurarFormulario() {
+                renderTimes();
 
-    if (!form) return;
-
-    form.addEventListener("submit", async function (event) {
-
-        event.preventDefault();
-
-        const nomeElement = document.getElementById("nome");
-        const whatsappElement = document.getElementById("whatsapp");
-
-        const nome = nomeElement ? nomeElement.value.trim() : "";
-        const whatsapp = whatsappElement
-            ? whatsappElement.value.trim()
-            : "";
-
-        const servico = servicoSelect
-            ? servicoSelect.value
-            : "";
-
-        const barbeiro = barbeiroSelect
-            ? barbeiroSelect.value
-            : "";
-
-        const data = dataInput
-            ? dataInput.value
-            : "";
-
-        const horario = horarioSelect
-            ? horarioSelect.value
-            : "";
-
-
-        // ------------------------------------------------
-        // VALIDAÇÃO
-        // ------------------------------------------------
-
-        if (!nome) {
-            alert("Digite seu nome.");
-            return;
-        }
-
-        if (!whatsapp) {
-            alert("Digite seu WhatsApp.");
-            return;
-        }
-
-        if (!servico) {
-            alert("Selecione um serviço.");
-            return;
-        }
-
-        if (!barbeiro) {
-            alert("Selecione um barbeiro.");
-            return;
-        }
-
-        if (!data) {
-            alert("Selecione uma data.");
-            return;
-        }
-
-        if (!horario) {
-            alert("Selecione um horário.");
-            return;
-        }
-
-
-        // ------------------------------------------------
-        // PREÇO
-        // ------------------------------------------------
-
-        const preco = servicos[servico];
-
-        if (!preco) {
-            alert("Serviço inválido.");
-            return;
-        }
-
-
-        // ------------------------------------------------
-        // VERIFICAR SE O HORÁRIO AINDA ESTÁ DISPONÍVEL
-        // ------------------------------------------------
-
-        try {
-
-            const { data: existente, error: erroBusca } = await db
-                .from("agendamentos")
-                .select("id")
-                .eq("data", data)
-                .eq("horario", horario)
-                .eq("barbeiro", barbeiro)
-                .limit(1);
-
-            if (erroBusca) {
-                console.error(erroBusca);
-                alert("Não foi possível verificar o horário.");
-                return;
             }
+        );
 
-            if (existente && existente.length > 0) {
-
-                alert(
-                    "Esse horário acabou de ser reservado. Escolha outro."
-                );
-
-                await carregarHorarios();
-
-                return;
-            }
+    }
 
 
-            // ------------------------------------------------
-            // SALVAR AGENDAMENTO
-            // ------------------------------------------------
+    // ----------------------------------------------
+    // BOTÕES PRÓXIMO
+    // ----------------------------------------------
 
-            const { error: erroInsercao } = await db
-                .from("agendamentos")
-                .insert([
-                    {
-                        nome: nome,
-                        whatsapp: whatsapp,
-                        servico: servico,
-                        preco: preco,
-                        barbeiro: barbeiro,
-                        data: data,
-                        horario: horario
+    document
+        .querySelectorAll(".next-btn")
+        .forEach(function (button) {
+
+            button.addEventListener(
+                "click",
+                function () {
+
+                    const nextStep =
+                        Number(button.dataset.next);
+
+                    if (nextStep === 2) {
+
+                        if (!state.service) {
+
+                            alert(
+                                "Escolha um serviço primeiro."
+                            );
+
+                            return;
+                        }
+
                     }
-                ]);
 
 
-            if (erroInsercao) {
+                    if (nextStep === 3) {
 
-                console.error(
-                    "Erro ao salvar agendamento:",
-                    erroInsercao
-                );
+                        if (!state.barber) {
 
-                alert(
-                    "Não foi possível realizar o agendamento."
-                );
+                            alert(
+                                "Escolha um barbeiro."
+                            );
 
-                return;
-            }
+                            return;
+                        }
 
 
-            // ------------------------------------------------
-            // SUCESSO
-            // ------------------------------------------------
+                        if (!state.date) {
 
-            mostrarSucesso(
-                nome,
-                servico,
-                barbeiro,
-                data,
-                horario
+                            alert(
+                                "Escolha uma data."
+                            );
+
+                            return;
+                        }
+
+
+                        if (!state.time) {
+
+                            alert(
+                                "Escolha um horário."
+                            );
+
+                            return;
+                        }
+
+                    }
+
+
+                    goToStep(nextStep);
+
+                }
             );
 
-            form.reset();
+        });
 
-            if (horarioSelect) {
-                horarioSelect.innerHTML =
-                    '<option value="">Selecione um horário</option>';
-            }
 
-        } catch (erro) {
+    // ----------------------------------------------
+    // BOTÕES VOLTAR
+    // ----------------------------------------------
 
-            console.error(erro);
+    document
+        .querySelectorAll(".back-btn")
+        .forEach(function (button) {
 
-            alert(
-                "Ocorreu um erro inesperado. Tente novamente."
+            button.addEventListener(
+                "click",
+                function () {
+
+                    const backStep =
+                        Number(button.dataset.back);
+
+                    goToStep(backStep);
+
+                }
             );
-        }
-    });
+
+        });
+
+
+    // ----------------------------------------------
+    // FORMULÁRIO
+    // ----------------------------------------------
+
+    if (bookingForm) {
+
+        bookingForm.addEventListener(
+            "submit",
+            confirmarAgendamento
+        );
+
+    }
+
+
+    // ----------------------------------------------
+    // FECHAR MODAL DE SUCESSO
+    // ----------------------------------------------
+
+    const closeSuccess =
+        document.getElementById("closeSuccess");
+
+
+    if (closeSuccess) {
+
+        closeSuccess.addEventListener(
+            "click",
+            function () {
+
+                document
+                    .getElementById("successModal")
+                    .classList.remove("show");
+
+            }
+        );
+
+    }
+
 }
 
 
 // ======================================================
-// MENSAGEM DE SUCESSO
+// TROCAR ETAPA
 // ======================================================
 
-function mostrarSucesso(
-    nome,
-    servico,
-    barbeiro,
-    data,
-    horario
-) {
+function goToStep(stepNumber) {
 
-    const mensagem = `
-Agendamento realizado com sucesso!
+    // Esconde todas as etapas
 
-Cliente: ${nome}
-Serviço: ${servico}
-Barbeiro: ${barbeiro}
-Data: ${formatarData(data)}
-Horário: ${horario}
-`;
+    document
+        .querySelectorAll(".form-step")
+        .forEach(function (step) {
 
-    alert(mensagem);
+            step.classList.remove("visible");
+
+        });
+
+
+    // Mostra a etapa desejada
+
+    const target =
+        document.getElementById(
+            `step${stepNumber}`
+        );
+
+
+    if (target) {
+
+        target.classList.add("visible");
+
+    }
+
+
+    // Atualiza indicador das etapas
+
+    document
+        .querySelectorAll(".step")
+        .forEach(function (step) {
+
+            const number =
+                Number(step.dataset.step);
+
+            step.classList.toggle(
+                "active",
+                number === stepNumber
+            );
+
+        });
+
+
+    // Se entrou na etapa 2
+    // carrega horários
+
+    if (stepNumber === 2) {
+
+        renderTimes();
+
+    }
+
+
+    // Se entrou na etapa 3
+    // mostra resumo
+
+    if (stepNumber === 3) {
+
+        renderSummary();
+
+    }
+
+}
+
+
+// ======================================================
+// MOSTRAR RESUMO
+// ======================================================
+
+function renderSummary() {
+
+    if (!summary) return;
+
+    if (!state.service) return;
+
+
+    const dataFormatada =
+        formatDate(state.date);
+
+
+    summary.innerHTML = `
+        <strong>
+            ${state.service.name}
+        </strong>
+
+        <span>
+            R$ ${formatPrice(state.service.price)}
+        </span>
+
+        <br>
+
+        <span class="gold">
+            ${dataFormatada}
+            às
+            ${state.time}
+        </span>
+
+        ·
+
+        ${state.barber}
+    `;
+
 }
 
 
@@ -374,26 +565,458 @@ Horário: ${horario}
 // FORMATAR DATA
 // ======================================================
 
-function formatarData(data) {
+function formatDate(date) {
 
-    if (!data) return "";
+    if (!date) return "";
 
-    const partes = data.split("-");
+    const parts =
+        date.split("-");
 
-    if (partes.length !== 3) {
-        return data;
+    if (parts.length !== 3) {
+        return date;
     }
 
-    return `${partes[2]}/${partes[1]}/${partes[0]}`;
+    return `
+        ${parts[2]}/${parts[1]}/${parts[0]}
+    `;
+
 }
 
 
 // ======================================================
-// MENSAGEM DE ERRO
+// GERAR HORÁRIOS
 // ======================================================
 
-function mostrarErro(mensagem) {
-    console.error(mensagem);
+function generateTimes() {
+
+    const times = [];
+
+
+    for (
+        let hour = OPEN_HOUR;
+        hour < CLOSE_HOUR;
+        hour++
+    ) {
+
+        for (
+            let minute = 0;
+            minute < 60;
+            minute += INTERVAL
+        ) {
+
+            const time =
+                `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
+
+            times.push(time);
+
+        }
+
+    }
+
+
+    return times;
+
+}
+
+
+// ======================================================
+// BUSCAR HORÁRIOS OCUPADOS
+// ======================================================
+
+async function getUsedTimes() {
+
+    if (!state.barber || !state.date) {
+        return [];
+    }
+
+
+    const { data, error } =
+        await db
+            .from("agendamentos")
+            .select("horario")
+            .eq("data", state.date)
+            .eq("barbeiro", state.barber);
+
+
+    if (error) {
+
+        console.error(
+            "Erro ao buscar horários:",
+            error
+        );
+
+        alert(
+            "Não foi possível carregar os horários."
+        );
+
+        return [];
+
+    }
+
+
+    return (data || []).map(function (item) {
+
+        return String(
+            item.horario
+        ).substring(0, 5);
+
+    });
+
+}
+
+
+// ======================================================
+// RENDERIZAR HORÁRIOS
+// ======================================================
+
+async function renderTimes() {
+
+    if (!timesContainer) return;
+
+
+    // Se ainda não escolheu barbeiro ou data
+
+    if (!state.barber || !state.date) {
+
+        timesContainer.innerHTML = `
+            <p style="color:#777;font-size:13px">
+                Selecione barbeiro e data
+                para ver os horários.
+            </p>
+        `;
+
+        return;
+
+    }
+
+
+    timesContainer.innerHTML = `
+        <p style="color:#777;font-size:13px">
+            Carregando horários...
+        </p>
+    `;
+
+
+    const usedTimes =
+        await getUsedTimes();
+
+
+    timesContainer.innerHTML = "";
+
+
+    const times =
+        generateTimes();
+
+
+    times.forEach(function (time) {
+
+        const button =
+            document.createElement("button");
+
+
+        button.type = "button";
+
+        button.className = "time";
+
+        button.textContent = time;
+
+
+        // Horário ocupado
+
+        if (usedTimes.includes(time)) {
+
+            button.disabled = true;
+
+            button.classList.add(
+                "disabled"
+            );
+
+        }
+
+        // Horário disponível
+
+        else {
+
+            button.addEventListener(
+                "click",
+                function () {
+
+                    state.time = time;
+
+
+                    // Remove seleção anterior
+
+                    document
+                        .querySelectorAll(".time")
+                        .forEach(function (item) {
+
+                            item.classList.remove(
+                                "selected"
+                            );
+
+                        });
+
+
+                    // Seleciona o horário
+
+                    button.classList.add(
+                        "selected"
+                    );
+
+                }
+            );
+
+        }
+
+
+        timesContainer.appendChild(button);
+
+    });
+
+}
+
+
+// ======================================================
+// CONFIRMAR AGENDAMENTO
+// ======================================================
+
+async function confirmarAgendamento(event) {
+
+    event.preventDefault();
+
+
+    const nome =
+        nameInput.value.trim();
+
+    const whatsapp =
+        phoneInput.value.trim();
+
+
+    // ----------------------------------------------
+    // VALIDAÇÕES
+    // ----------------------------------------------
+
+    if (!state.service) {
+
+        alert(
+            "Escolha um serviço."
+        );
+
+        goToStep(1);
+
+        return;
+
+    }
+
+
+    if (!state.barber) {
+
+        alert(
+            "Escolha um barbeiro."
+        );
+
+        goToStep(2);
+
+        return;
+
+    }
+
+
+    if (!state.date) {
+
+        alert(
+            "Escolha uma data."
+        );
+
+        goToStep(2);
+
+        return;
+
+    }
+
+
+    if (!state.time) {
+
+        alert(
+            "Escolha um horário."
+        );
+
+        goToStep(2);
+
+        return;
+
+    }
+
+
+    if (!nome) {
+
+        alert(
+            "Digite seu nome."
+        );
+
+        return;
+
+    }
+
+
+    if (!whatsapp) {
+
+        alert(
+            "Digite seu WhatsApp."
+        );
+
+        return;
+
+    }
+
+
+    // ----------------------------------------------
+    // VERIFICAR SE O HORÁRIO AINDA ESTÁ LIVRE
+    // ----------------------------------------------
+
+    const { data: existing, error: checkError } =
+        await db
+            .from("agendamentos")
+            .select("id")
+            .eq("data", state.date)
+            .eq("horario", state.time)
+            .eq("barbeiro", state.barber);
+
+
+    if (checkError) {
+
+        console.error(
+            checkError
+        );
+
+        alert(
+            "Erro ao verificar disponibilidade."
+        );
+
+        return;
+
+    }
+
+
+    if (existing && existing.length > 0) {
+
+        alert(
+            "Esse horário acabou de ser ocupado. Escolha outro."
+        );
+
+        await renderTimes();
+
+        return;
+
+    }
+
+
+    // ----------------------------------------------
+    // SALVAR NO SUPABASE
+    // ----------------------------------------------
+
+    const { error } =
+        await db
+            .from("agendamentos")
+            .insert([
+                {
+                    nome: nome,
+                    whatsapp: whatsapp,
+                    servico: state.service.name,
+                    preco: state.service.price,
+                    barbeiro: state.barber,
+                    data: state.date,
+                    horario: state.time
+                }
+            ]);
+
+
+    if (error) {
+
+        console.error(
+            "Erro ao salvar:",
+            error
+        );
+
+        alert(
+            "Não foi possível confirmar o agendamento."
+        );
+
+        return;
+
+    }
+
+
+    // ----------------------------------------------
+    // MOSTRAR SUCESSO
+    // ----------------------------------------------
+
+    const successText =
+        document.getElementById(
+            "successText"
+        );
+
+
+    successText.innerHTML = `
+        <strong>
+            ${state.service.name}
+        </strong>
+        <br>
+
+        ${formatDate(state.date)}
+        às
+        ${state.time}
+
+        <br>
+
+        ${state.barber}
+        ·
+        ${nome}
+    `;
+
+
+    document
+        .getElementById("successModal")
+        .classList.add("show");
+
+
+    // Limpa formulário
+
+    bookingForm.reset();
+
+
+    // Reseta estado
+
+    state = {
+        service: null,
+        barber: "",
+        date: "",
+        time: ""
+    };
+
+
+    // Remove seleção visual
+
+    document
+        .querySelectorAll("[data-service]")
+        .forEach(function (item) {
+
+            item.classList.remove(
+                "selected"
+            );
+
+        });
+
+
+    // Volta para primeira etapa
+
+    goToStep(1);
+
+
+    // Configura data novamente
+
+    configurarData();
+
 }
 
 
@@ -403,13 +1026,132 @@ function mostrarErro(mensagem) {
 
 function configurarAdmin() {
 
-    const botaoAdmin = document.getElementById("adminBtn");
+    const openAdmin =
+        document.getElementById(
+            "openAdmin"
+        );
 
-    if (!botaoAdmin) return;
 
-    botaoAdmin.addEventListener("click", function () {
-        carregarAgenda();
-    });
+    const closeAdmin =
+        document.getElementById(
+            "closeAdmin"
+        );
+
+
+    const adminModal =
+        document.getElementById(
+            "adminModal"
+        );
+
+
+    const adminDate =
+        document.getElementById(
+            "adminDate"
+        );
+
+
+    if (openAdmin) {
+
+        openAdmin.addEventListener(
+            "click",
+            function () {
+
+                adminModal.classList.add(
+                    "show"
+                );
+
+                configurarDataAdmin();
+
+                carregarAgenda();
+
+            }
+        );
+
+    }
+
+
+    if (closeAdmin) {
+
+        closeAdmin.addEventListener(
+            "click",
+            function () {
+
+                adminModal.classList.remove(
+                    "show"
+                );
+
+            }
+        );
+
+    }
+
+
+    if (adminDate) {
+
+        adminDate.addEventListener(
+            "change",
+            carregarAgenda
+        );
+
+    }
+
+
+    const clearAll =
+        document.getElementById(
+            "clearAll"
+        );
+
+
+    if (clearAll) {
+
+        clearAll.addEventListener(
+            "click",
+            limparAgendamentos
+        );
+
+    }
+
+}
+
+
+// ======================================================
+// DATA DO ADMIN
+// ======================================================
+
+function configurarDataAdmin() {
+
+    const adminDate =
+        document.getElementById(
+            "adminDate"
+        );
+
+
+    if (!adminDate) return;
+
+
+    const hoje =
+        new Date();
+
+
+    const ano =
+        hoje.getFullYear();
+
+
+    const mes =
+        String(
+            hoje.getMonth() + 1
+        ).padStart(2, "0");
+
+
+    const dia =
+        String(
+            hoje.getDate()
+        ).padStart(2, "0");
+
+
+    adminDate.value =
+        `${ano}-${mes}-${dia}`;
+
 }
 
 
@@ -419,57 +1161,112 @@ function configurarAdmin() {
 
 async function carregarAgenda() {
 
-    try {
+    const adminList =
+        document.getElementById(
+            "adminList"
+        );
 
-        const { data: agendamentos, error } = await db
+
+    const adminDate =
+        document.getElementById(
+            "adminDate"
+        );
+
+
+    if (!adminList || !adminDate) {
+        return;
+    }
+
+
+    const data =
+        adminDate.value;
+
+
+    adminList.innerHTML = `
+        <p style="color:#777">
+            Carregando agenda...
+        </p>
+    `;
+
+
+    const { data: agendamentos, error } =
+        await db
             .from("agendamentos")
             .select("*")
-            .order("data", { ascending: true })
-            .order("horario", { ascending: true });
-
-        if (error) {
-
-            console.error(
-                "Erro ao carregar agenda:",
-                error
-            );
-
-            alert("Não foi possível carregar a agenda.");
-
-            return;
-        }
+            .eq("data", data)
+            .order("horario", {
+                ascending: true
+            });
 
 
-        if (!agendamentos || agendamentos.length === 0) {
+    if (error) {
 
-            alert("Nenhum agendamento encontrado.");
+        console.error(
+            "Erro ao carregar agenda:",
+            error
+        );
 
-            return;
-        }
+        adminList.innerHTML = `
+            <p style="color:#777">
+                Erro ao carregar a agenda.
+            </p>
+        `;
 
+        return;
 
-        let mensagem = "AGENDA DA BARBEARIA\n\n";
-
-        agendamentos.forEach(function (agendamento, index) {
-
-            mensagem +=
-                `${index + 1}. ${agendamento.nome}\n` +
-                `Serviço: ${agendamento.servico}\n` +
-                `Barbeiro: ${agendamento.barbeiro}\n` +
-                `Data: ${formatarData(agendamento.data)}\n` +
-                `Horário: ${String(agendamento.horario).substring(0, 5)}\n` +
-                `WhatsApp: ${agendamento.whatsapp}\n\n`;
-
-        });
-
-        alert(mensagem);
-
-    } catch (erro) {
-
-        console.error(erro);
-
-        alert("Erro ao carregar a agenda.");
     }
+
+
+    if (
+        !agendamentos ||
+        agendamentos.length === 0
+    ) {
+
+        adminList.innerHTML = `
+            <p style="color:#777">
+                Nenhum agendamento nesta data.
+            </p>
+        `;
+
+        return;
+
+    }
+
+
+    adminList.innerHTML =
+        agendamentos.map(function (booking) {
+
+            return `
+                <div class="booking-item">
+
+                    <strong>
+                        ${String(
+                            booking.horario
+                        ).substring(0, 5)}
+                        ·
+                        ${booking.servico}
+                    </strong>
+
+                    <small>
+                        ${booking.nome}
+                        ·
+                        ${booking.whatsapp}
+                        ·
+                        ${booking.barbeiro}
+                    </small>
+
+                    <button
+                        type="button"
+                        onclick="cancelBooking('${booking.id}')"
+                    >
+                        Cancelar
+                    </button>
+
+                </div>
+            `;
+
+        }).join("");
+
 }
 
 
@@ -477,27 +1274,30 @@ async function carregarAgenda() {
 // CANCELAR AGENDAMENTO
 // ======================================================
 
-async function cancelarAgendamento(id) {
+window.cancelBooking =
+    async function (id) {
 
-    if (!id) return;
+        const confirmar =
+            confirm(
+                "Cancelar este agendamento?"
+            );
 
-    const confirmar = confirm(
-        "Tem certeza que deseja cancelar este agendamento?"
-    );
 
-    if (!confirmar) return;
+        if (!confirmar) {
+            return;
+        }
 
-    try {
 
-        const { error } = await db
-            .from("agendamentos")
-            .delete()
-            .eq("id", id);
+        const { error } =
+            await db
+                .from("agendamentos")
+                .delete()
+                .eq("id", id);
+
 
         if (error) {
 
             console.error(
-                "Erro ao cancelar:",
                 error
             );
 
@@ -506,16 +1306,71 @@ async function cancelarAgendamento(id) {
             );
 
             return;
+
         }
 
-        alert("Agendamento cancelado com sucesso.");
 
-        await carregarHorarios();
+        alert(
+            "Agendamento cancelado."
+        );
 
-    } catch (erro) {
 
-        console.error(erro);
+        await carregarAgenda();
 
-        alert("Erro inesperado ao cancelar.");
+        await renderTimes();
+
+    };
+
+
+// ======================================================
+// LIMPAR AGENDAMENTOS
+// ======================================================
+
+async function limparAgendamentos() {
+
+    const confirmar =
+        confirm(
+            "Tem certeza que deseja apagar todos os agendamentos?"
+        );
+
+
+    if (!confirmar) {
+        return;
     }
+
+
+    const { error } =
+        await db
+            .from("agendamentos")
+            .delete()
+            .neq(
+                "id",
+                "00000000-0000-0000-0000-000000000000"
+            );
+
+
+    if (error) {
+
+        console.error(
+            error
+        );
+
+        alert(
+            "Não foi possível limpar os agendamentos."
+        );
+
+        return;
+
+    }
+
+
+    alert(
+        "Todos os agendamentos foram apagados."
+    );
+
+
+    await carregarAgenda();
+
+    await renderTimes();
+
 }
