@@ -18,6 +18,9 @@
         <span>Estilo que marca presença</span>
       </div>
     </div>
+    <button class="admin-link" id="openCancel">
+  Cancelar agendamento
+</button>
     <button class="admin-link" id="openAdmin">Agenda</button>
     <div class="modal" id="loginModal">
   <div class="modal-box">
@@ -178,5 +181,57 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="script.js"></script>
+  <div class="modal" id="cancelModal">
+  <div class="modal-box">
+
+    <button
+      class="close-modal"
+      id="closeCancel"
+      type="button"
+    >
+      ×
+    </button>
+
+    <p class="eyebrow">
+      CANCELAMENTO
+    </p>
+
+    <h2>
+      Cancelar agendamento
+    </h2>
+
+    <p>
+      Digite o código de cancelamento
+      recebido ao realizar o agendamento.
+    </p>
+
+    <form id="cancelForm">
+
+      <label for="cancelCode">
+        Código de cancelamento
+      </label>
+
+      <input
+        type="text"
+        id="cancelCode"
+        maxlength="8"
+        placeholder="Ex.: BK7F92QX"
+        autocomplete="off"
+        required
+      >
+
+      <button
+        type="submit"
+        class="primary-btn"
+      >
+        Cancelar agendamento
+      </button>
+
+      <p id="cancelMessage"></p>
+
+    </form>
+
+  </div>
+</div>
 </body>
 </html>
