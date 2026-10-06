@@ -1026,48 +1026,29 @@ async function confirmarAgendamento(event) {
 
 function configurarAdmin() {
 
-    const openAdmin =
-        document.getElementById(
-            "openAdmin"
-        );
-
-
-    const closeAdmin =
-        document.getElementById(
-            "closeAdmin"
-        );
-
-
-    const adminModal =
-        document.getElementById(
-            "adminModal"
-        );
-
-
-    const adminDate =
-        document.getElementById(
-            "adminDate"
-        );
-
-
     if (openAdmin) {
 
-        openAdmin.addEventListener(
-            "click",
-            function () {
+    openAdmin.addEventListener(
+        "click",
+        function () {
 
-                adminModal.classList.add(
-                    "show"
-                );
+            const senha = prompt("Digite a senha para acessar a Agenda:");
 
-                configurarDataAdmin();
-
-                carregarAgenda();
-
+            if (senha !== "Black@2026") {
+                alert("Senha incorreta.");
+                return;
             }
-        );
 
-    }
+            adminModal.classList.add("show");
+
+            configurarDataAdmin();
+
+            carregarAgenda();
+
+        }
+    );
+
+}
 
 
     if (closeAdmin) {
