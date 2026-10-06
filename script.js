@@ -631,11 +631,10 @@ async function getUsedTimes() {
 
 
     const { data, error } =
-        await db
-            .from("agendamentos")
-            .select("horario")
-            .eq("data", state.date)
-            .eq("barbeiro", state.barber);
+  await db.rpc("horarios_ocupados", {
+    p_data: state.date,
+    p_barbeiro: state.barber
+  });
 
 
     if (error) {
