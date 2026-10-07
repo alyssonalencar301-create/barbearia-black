@@ -75,7 +75,7 @@ dourado: "#d8a84e",
     intervalo: 30,
 
     diasFuncionamento: [
-       0, // Domingo
+       1, // Segunda
         2, // Terça
         3, // Quarta
         4, // Quinta
