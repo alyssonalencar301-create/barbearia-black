@@ -96,7 +96,8 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("nomeBarbearia").textContent = CONFIG.nome.toUpperCase();
 document.getElementById("nomeBarbeariaHero").textContent = CONFIG.nome.toUpperCase();
 document.getElementById("nomeBarbeariaFooter").textContent = CONFIG.nome;
-
+document.getElementById("whatsappBarbearia").textContent = CONFIG.whatsapp;
+    
     renderServices();
 
     configurarData();
