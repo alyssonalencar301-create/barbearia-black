@@ -8,6 +8,9 @@ const CONFIG = {
 
     logo: "logo.png",
     slogan: "Seu estilo, sua identidade",
+    heroTitulo1: "SEU ESTILO.",
+heroTitulo2: "SEU HORÁRIO.",
+heroDescricao: "Escolha o serviço, o barbeiro e o melhor horário. Seu agendamento fica confirmado em poucos passos.",
 
 whatsapp: "(87) 98888-7777",
 
