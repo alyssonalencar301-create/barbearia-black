@@ -60,7 +60,7 @@ const CONFIG = {
 
     horario: {
         abertura: 8,
-        fechamento: 19,
+        fechamento: 18,
         intervalo: 30
     }
 
