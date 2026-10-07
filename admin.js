@@ -387,12 +387,12 @@ async function cancelarAgendamento(id) {
     }
 
 
-    const {
-        error
-    } = await db
-        .from("agendamentos")
-        .delete()
-        .eq("id", id);
+const {
+    error
+} = await db
+    .from("agendamentos")
+    .delete()
+    .not("id", "is", null);
 
 
     if (error) {
