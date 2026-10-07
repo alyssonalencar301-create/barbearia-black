@@ -107,6 +107,18 @@ document.documentElement.style.setProperty("--gold", CONFIG.cores.dourado);
 document.documentElement.style.setProperty("--gold2", CONFIG.cores.douradoClaro);
 document.documentElement.style.setProperty("--line", CONFIG.cores.linha);
     document.documentElement.style.setProperty("--servicoNome", CONFIG.cores.servicoNome);
+    document.getElementById("horarioHero").textContent =
+    String(CONFIG.horario.abertura).padStart(2, "0") +
+    ":00 — " +
+    String(CONFIG.horario.fechamento).padStart(2, "0") +
+    ":00";
+
+document.getElementById("horarioFooter").textContent =
+    "Segunda a sábado, " +
+    String(CONFIG.horario.abertura).padStart(2, "0") +
+    "h às " +
+    String(CONFIG.horario.fechamento).padStart(2, "0") +
+    "h";
     
     renderServices();
 
