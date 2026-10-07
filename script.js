@@ -94,7 +94,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.title = CONFIG.nome + " | Agendamento";
     document.getElementById("nomeBarbearia").textContent = CONFIG.nome.toUpperCase();
-document.getElementById("nomeBarbeariaHero").textContent = CONFIG.nome.toUpperCase();
+document.getElementById("nomeBarbearia").textContent =
+    CONFIG.nome.toUpperCase();
+
+document.getElementById("logoBarbearia").src =
+    CONFIG.logo;
 document.getElementById("nomeBarbeariaFooter").textContent = CONFIG.nome;
 document.getElementById("whatsappBarbearia").textContent = CONFIG.whatsapp;
     document.getElementById("enderecoBarbearia").textContent = CONFIG.endereco;
