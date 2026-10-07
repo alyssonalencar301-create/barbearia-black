@@ -738,11 +738,30 @@ async function renderTimes() {
     timesContainer.innerHTML = "";
 
 
-    const times =
-        generateTimes();
+const times =
+    generateTimes();
 
 
-    times.forEach(function (time) {
+// Se a barbearia não funciona neste dia
+if (times.length === 0) {
+
+    timesContainer.innerHTML = `
+        <p style="
+            color:#777;
+            font-size:13px;
+            text-align:center;
+            padding:20px 0;
+        ">
+            A barbearia não funciona neste dia.<br>
+            Escolha outra data para continuar.
+        </p>
+    `;
+
+    return;
+}
+
+
+times.forEach(function (time) {
 
         const button =
             document.createElement("button");
