@@ -65,6 +65,16 @@ const serviceOptions = document.getElementById("serviceOptions");
 const servicesGrid = document.getElementById("servicesGrid");
 
 const barberInput = document.getElementById("barber");
+CONFIG.barbeiros.forEach(function(barbeiro) {
+
+    const option = document.createElement("option");
+
+    option.value = barbeiro;
+    option.textContent = barbeiro;
+
+    barberInput.appendChild(option);
+
+});
 const dateInput = document.getElementById("date");
 const timesContainer = document.getElementById("times");
 
