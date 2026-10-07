@@ -32,6 +32,8 @@ const clearAll = document.getElementById("clearAll");
 // ==========================================
 
 document.addEventListener("DOMContentLoaded", async () => {
+    document.getElementById("nomeBarbeariaAdmin").textContent =
+    CONFIG.nome.toUpperCase();
 
     const {
         data: { session }
