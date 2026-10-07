@@ -43,8 +43,14 @@ const CONFIG = {
     {
         id: "corte-barba",
         nome: "Corte + Barba",
-        descricao: "O combo completo",
+        descricao: "Combo corte e barba",
         preco: 45
+    }
+       {
+        id: "corte-barba-sobrancelha",
+        nome: "Corte + Barba + Sobrancelha",
+        descricao: "O combo completo",
+        preco: 65
     }
 ]
 };
