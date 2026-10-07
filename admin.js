@@ -381,58 +381,6 @@ async function cancelarAgendamento(id) {
         "Tem certeza que deseja cancelar este agendamento?"
     );
 
-
-    if (!confirmar) {
-        return;
-    }
-
-
-if (error) {
-    console.error("ERRO AO EXCLUIR:", error);
-
-    alert(
-        "ERRO:\n\n" +
-        error.message +
-        "\n\nCódigo: " +
-        (error.code || "sem código")
-    );
-
-    return;
-}
-
-
-    if (error) {
-
-        console.error(error);
-
-        alert(
-            "Não foi possível cancelar o agendamento."
-        );
-
-        return;
-    }
-
-
-    alert(
-        "Agendamento cancelado com sucesso."
-    );
-
-
-    await carregarAgenda();
-
-}
-
-
-// ==========================================
-// EXCLUIR TODOS
-// ==========================================
-
-async function cancelarAgendamento(id) {
-
-    const confirmar = confirm(
-        "Tem certeza que deseja cancelar este agendamento?"
-    );
-
     if (!confirmar) {
         return;
     }
@@ -461,6 +409,57 @@ async function cancelarAgendamento(id) {
     await carregarAgenda();
 }
 
+
+// ==========================================
+// EXCLUIR TODOS
+// ==========================================
+
+async function excluirTodos() {
+
+    const confirmar = confirm(
+        "ATENÇÃO!\n\n" +
+        "Isso excluirá TODOS os agendamentos.\n\n" +
+        "Deseja realmente continuar?"
+    );
+
+    if (!confirmar) {
+        return;
+    }
+
+    const segundaConfirmacao = confirm(
+        "Tem certeza absoluta?\n\n" +
+        "Todos os agendamentos serão excluídos."
+    );
+
+    if (!segundaConfirmacao) {
+        return;
+    }
+
+    const { error } = await db.rpc(
+        "excluir_todos_agendamentos"
+    );
+
+    if (error) {
+
+        console.error(
+            "ERRO AO EXCLUIR TODOS:",
+            error
+        );
+
+        alert(
+            "Não foi possível excluir os agendamentos.\n\n" +
+            error.message
+        );
+
+        return;
+    }
+
+    alert(
+        "Todos os agendamentos foram excluídos."
+    );
+
+    await carregarAgenda();
+}
 // ==========================================
 // LOGOUT
 // ==========================================
