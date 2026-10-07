@@ -9,6 +9,8 @@ const db = window.supabase.createClient(
 
 // NOME DA BARBEARIA NA ABA DO NAVEGADOR
 document.title = "Agenda — " + CONFIG.nome;
+document.getElementById("nomeBarbeariaAdminFooter").textContent =
+    CONFIG.nome;
 
 
 // ==========================================
