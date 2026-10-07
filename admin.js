@@ -427,60 +427,39 @@ if (error) {
 // EXCLUIR TODOS
 // ==========================================
 
-async function excluirTodos() {
+async function cancelarAgendamento(id) {
 
     const confirmar = confirm(
-        "ATENÇÃO!\n\n" +
-        "Isso excluirá TODOS os agendamentos.\n\n" +
-        "Deseja realmente continuar?"
+        "Tem certeza que deseja cancelar este agendamento?"
     );
-
 
     if (!confirmar) {
         return;
     }
 
-
-    const segundaConfirmacao = confirm(
-        "Tem certeza absoluta?\n\n" +
-        "Todos os agendamentos serão excluídos."
-    );
-
-
-    if (!segundaConfirmacao) {
-        return;
-    }
-
-
-    const {
-        error
-    } = await db
+    const { error } = await db
         .from("agendamentos")
         .delete()
-        .neq("id", 0);
-
+        .eq("id", id);
 
     if (error) {
 
-        console.error(error);
+        console.error("ERRO AO CANCELAR:", error);
 
         alert(
-            "Não foi possível excluir os agendamentos."
+            "Não foi possível cancelar o agendamento.\n\n" +
+            error.message
         );
 
         return;
     }
 
-
     alert(
-        "Todos os agendamentos foram excluídos."
+        "Agendamento cancelado com sucesso."
     );
 
-
     await carregarAgenda();
-
 }
-
 
 // ==========================================
 // LOGOUT
