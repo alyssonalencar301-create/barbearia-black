@@ -622,10 +622,10 @@ function generateTimes() {
     const dataSelecionada = new Date(state.date + "T00:00:00");
     const diaSemana = dataSelecionada.getDay();
 
-    // Domingo = 0
-    if (diaSemana === 0) {
-        return times;
-    }
+   // Verifica se a barbearia funciona neste dia
+if (!CONFIG.horario.diasFuncionamento.includes(diaSemana)) {
+    return times;
+}
 
 
     for (
