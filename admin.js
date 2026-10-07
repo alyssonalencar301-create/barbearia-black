@@ -388,11 +388,9 @@ async function cancelarAgendamento(id) {
 
 
 const {
+    data,
     error
-} = await db
-    .from("agendamentos")
-    .delete()
-    .not("id", "is", null);
+} = await db.rpc("excluir_todos_agendamentos");
 
 
     if (error) {
