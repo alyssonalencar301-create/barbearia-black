@@ -7,6 +7,9 @@ const db = window.supabase.createClient(
     SUPABASE_KEY
 );
 
+// NOME DA BARBEARIA NA ABA DO NAVEGADOR
+document.title = "Agenda — " + CONFIG.nome;
+
 
 // ==========================================
 // ELEMENTOS
