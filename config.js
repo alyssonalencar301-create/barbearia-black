@@ -7,7 +7,7 @@ const CONFIG = {
    nome: "Barber Black",
 
     logo: "logo.png",
-    slogan: "Estilo que marca presença",
+    slogan: "Seu estilo, sua identidade",
 
 whatsapp: "(87) 98888-7777",
 
