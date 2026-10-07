@@ -69,10 +69,19 @@ dourado: "#d8a84e",
     // HORÁRIO DE FUNCIONAMENTO
     // ==========================================
 
-    horario: {
-        abertura: 8,
-        fechamento: 18,
-        intervalo: 30
-    }
+   horario: {
+    abertura: 8,
+    fechamento: 19,
+    intervalo: 30,
+
+    diasFuncionamento: [
+        1, // Segunda
+        2, // Terça
+        3, // Quarta
+        4, // Quinta
+        5, // Sexta
+        6  // Sábado
+    ]
+}
 
 };
