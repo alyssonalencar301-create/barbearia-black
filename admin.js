@@ -54,20 +54,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("nomeBarbeariaAdmin").textContent =
     CONFIG.nome.toUpperCase();
 
-    const {
-        data: { session }
-    } = await db.auth.getSession();
+   const {
+    data: { session }
+} = await db.auth.getSession();
 
 
-    if (session) {
+if (session && sessionStorage.getItem("adminLogado") === "true") {
 
-        mostrarPainel();
+    mostrarPainel();
 
-    } else {
+} else {
 
-        mostrarLogin();
+    await db.auth.signOut();
 
-    }
+    mostrarLogin();
+
+}
 
 
     loginForm.addEventListener(
@@ -187,7 +189,9 @@ async function fazerLogin(event) {
     adminEmail.value = "";
     adminPassword.value = "";
 
+sessionStorage.setItem("adminLogado", "true");
 
+mostrarPainel();
     mostrarPainel();
 
 }
