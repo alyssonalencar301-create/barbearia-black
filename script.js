@@ -1636,4 +1636,6 @@ async function limparAgendamentos() {
 
     await renderTimes();
 
+    document.title = CONFIG.nome + " | Agendamento";
+
 }
