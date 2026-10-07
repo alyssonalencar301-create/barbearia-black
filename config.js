@@ -16,7 +16,7 @@ cores: {
     card2: "#1d1d1d",
     texto: "#f6f6f6",
     textoSecundario: "#a5a5a5",
-dourado: "#ff0000",
+dourado: "#d8a84e",
     douradoClaro: "#f0c66a",
     linha: "#292929",
     servicoNome: "#ffffff"
