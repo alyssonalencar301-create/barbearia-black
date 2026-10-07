@@ -106,6 +106,7 @@ document.documentElement.style.setProperty("--muted", CONFIG.cores.textoSecundar
 document.documentElement.style.setProperty("--gold", CONFIG.cores.dourado);
 document.documentElement.style.setProperty("--gold2", CONFIG.cores.douradoClaro);
 document.documentElement.style.setProperty("--line", CONFIG.cores.linha);
+    document.documentElement.style.setProperty("--servicoNome", CONFIG.cores.servicoNome);
     
     renderServices();
 
