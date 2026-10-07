@@ -27,15 +27,26 @@ const db = window.supabase.createClient(
 // SERVIÇOS
 // ======================================================
 
-const SERVICES = CONFIG.servicos.map(function(service) {
-    return {
-        id: service.id,
-        name: service.nome,
-        description: service.descricao,
-        price: service.preco
-    };
-});
-
+const SERVICES = [
+    {
+        id: "corte",
+        name: "Corte",
+        description: "Corte tradicional ou moderno",
+        price: 30
+    },
+    {
+        id: "barba",
+        name: "Barba",
+        description: "Barba completa e acabamento",
+        price: 20
+    },
+    {
+        id: "corte-barba",
+        name: "Corte + Barba",
+        description: "O combo completo",
+        price: 45
+    }
+];
 
 // ======================================================
 // CONFIGURAÇÕES DE HORÁRIO
