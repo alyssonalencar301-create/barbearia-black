@@ -98,6 +98,14 @@ document.getElementById("nomeBarbeariaHero").textContent = CONFIG.nome.toUpperCa
 document.getElementById("nomeBarbeariaFooter").textContent = CONFIG.nome;
 document.getElementById("whatsappBarbearia").textContent = CONFIG.whatsapp;
     document.getElementById("enderecoBarbearia").textContent = CONFIG.endereco;
+    document.documentElement.style.setProperty("--bg", CONFIG.cores.fundo);
+document.documentElement.style.setProperty("--card", CONFIG.cores.card);
+document.documentElement.style.setProperty("--card2", CONFIG.cores.card2);
+document.documentElement.style.setProperty("--text", CONFIG.cores.texto);
+document.documentElement.style.setProperty("--muted", CONFIG.cores.textoSecundario);
+document.documentElement.style.setProperty("--gold", CONFIG.cores.dourado);
+document.documentElement.style.setProperty("--gold2", CONFIG.cores.douradoClaro);
+document.documentElement.style.setProperty("--line", CONFIG.cores.linha);
     
     renderServices();
 
