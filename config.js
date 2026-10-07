@@ -18,8 +18,8 @@ cores: {
     textoSecundario: "#b8c2cc",
     dourado: "#3fa9f5",
     douradoClaro: "#75c7ff",
-    linha: "#334455"
-    servicoNome: "#ffffff",
+    linha: "#334455",
+    servicoNome: "#ffffff"
 },
     
     // ==========================================
