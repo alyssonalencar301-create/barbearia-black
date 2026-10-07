@@ -6,7 +6,7 @@ const CONFIG = {
 
     nome: "Barber Black",
 
-    whatsapp: "(87) 99999-9999",
+    whatsapp: "(87) 99999-0000",
 
     endereco: "Rua Principal, 100 - Centro",
 
