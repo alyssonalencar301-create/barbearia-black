@@ -47,3 +47,21 @@ h1 span{color:var(--gold)}.hero-text{max-width:570px;color:var(--muted);font-siz
     font-size: inherit;
     font-weight: inherit;
 }
+/* LOGO DA BARBEARIA */
+
+.brand-mark {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.brand-mark img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
