@@ -19,7 +19,7 @@ cores: {
     dourado: "#3fa9f5",
     douradoClaro: "#75c7ff",
     linha: "#334455"
-},
+}
     
     // ==========================================
     // BARBEIROS
