@@ -17,7 +17,8 @@ const CONFIG = {
 
     barbeiros: [
         "João",
-        "Pedro"
+        "Pedro",
+        "Bruno"
     ],
 
 
