@@ -98,6 +98,17 @@ document.getElementById("nomeBarbearia").textContent =
     CONFIG.nome.toUpperCase();
     document.getElementById("sloganBarbearia").textContent =
     CONFIG.slogan;
+    document.getElementById("nomeBarbeariaHeroTopo").textContent =
+    CONFIG.nome.toUpperCase();
+
+document.getElementById("heroTitulo1").textContent =
+    CONFIG.heroTitulo1;
+
+document.getElementById("heroTitulo2").textContent =
+    CONFIG.heroTitulo2;
+
+document.getElementById("heroDescricao").textContent =
+    CONFIG.heroDescricao;
 
 document.getElementById("logoBarbearia").src =
     CONFIG.logo;
