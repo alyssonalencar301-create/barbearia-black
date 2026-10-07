@@ -47,3 +47,4 @@ const CONFIG = {
         preco: 45
     }
 ]
+};
