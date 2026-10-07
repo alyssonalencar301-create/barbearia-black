@@ -90,9 +90,9 @@ const summary = document.getElementById("summary");
 // INICIALIZAÇÃO
 // ======================================================
 
-document.addEventListener("DOMContentLoaded", function (
+document.addEventListener("DOMContentLoaded", function () {
+
     document.title = CONFIG.nome + " | Agendamento";
-) {
 
     renderServices();
 
