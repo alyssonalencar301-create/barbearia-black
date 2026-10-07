@@ -97,6 +97,7 @@ document.addEventListener("DOMContentLoaded", function () {
 document.getElementById("nomeBarbeariaHero").textContent = CONFIG.nome.toUpperCase();
 document.getElementById("nomeBarbeariaFooter").textContent = CONFIG.nome;
 document.getElementById("whatsappBarbearia").textContent = CONFIG.whatsapp;
+    document.getElementById("enderecoBarbearia").textContent = CONFIG.endereco;
     
     renderServices();
 
