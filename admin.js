@@ -7,9 +7,11 @@ const db = window.supabase.createClient(
     SUPABASE_KEY
     {
         auth: {
-            persistSession: false,
-            autoRefreshToken: true
+            persistSession: true,
+            autoRefreshToken: true,
+            storage: window.sessionStorage
         }
+    }
     }
 );
 
