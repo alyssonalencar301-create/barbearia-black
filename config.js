@@ -25,21 +25,25 @@ const CONFIG = {
     // SERVIÇOS
     // ==========================================
 
-    servicos: [
-        {
-            nome: "Corte",
-            preco: 30
-        },
+   servicos: [
+    {
+        id: "corte",
+        nome: "Corte",
+        descricao: "Corte tradicional ou moderno",
+        preco: 30
+    },
 
-        {
-            nome: "Barba",
-            preco: 20
-        },
+    {
+        id: "barba",
+        nome: "Barba",
+        descricao: "Barba completa e acabamento",
+        preco: 20
+    },
 
-        {
-            nome: "Corte + Barba",
-            preco: 45
-        }
-    ]
-
-};
+    {
+        id: "corte-barba",
+        nome: "Corte + Barba",
+        descricao: "O combo completo",
+        preco: 45
+    }
+]
