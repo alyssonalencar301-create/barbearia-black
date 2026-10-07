@@ -387,10 +387,18 @@ async function cancelarAgendamento(id) {
     }
 
 
-const {
-    data,
-    error
-} = await db.rpc("excluir_todos_agendamentos");
+if (error) {
+    console.error("ERRO AO EXCLUIR:", error);
+
+    alert(
+        "ERRO:\n\n" +
+        error.message +
+        "\n\nCódigo: " +
+        (error.code || "sem código")
+    );
+
+    return;
+}
 
 
     if (error) {
