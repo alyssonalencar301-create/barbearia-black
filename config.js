@@ -8,7 +8,7 @@ const CONFIG = {
 
     whatsapp: "(87) 99999-0000",
 
-    endereco: "Rua Principal, 100 - Centro",
+    endereco: "Rua Principal, 99 - Centro",
 
 
     // ==========================================
