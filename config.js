@@ -4,26 +4,22 @@ const CONFIG = {
     // IDENTIDADE DA BARBEARIA
     // ==========================================
 
-    nome: "Barber Black",
+   nome: "Barbearia Bruno",
 
-    whatsapp: "(87) 99999-0000",
+whatsapp: "(87) 98888-7777",
 
-    endereco: "Rua Principal, 99 - Centro",
+endereco: "Av. Central, 250 - Centro",
 
-    // ==========================================
-    // CORES
-    // ==========================================
-
-    cores: {
-        fundo: "#0b0b0b",
-        card: "#151515",
-        card2: "#1d1d1d",
-        texto: "#f6f6f6",
-        textoSecundario: "#a5a5a5",
-        dourado: "#d8a84e",
-        douradoClaro: "#f0c66a",
-        linha: "#292929"
-    },
+cores: {
+    fundo: "#101820",
+    card: "#1c2630",
+    card2: "#263746",
+    texto: "#ffffff",
+    textoSecundario: "#b8c2cc",
+    dourado: "#3fa9f5",
+    douradoClaro: "#75c7ff",
+    linha: "#334455"
+},
     
     // ==========================================
     // BARBEIROS
