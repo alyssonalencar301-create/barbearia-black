@@ -11,14 +11,14 @@ whatsapp: "(87) 98888-7777",
 endereco: "Av. Central, 250 - Centro",
 
 cores: {
-    fundo: "#101820",
-    card: "#1c2630",
-    card2: "#263746",
-    texto: "#ffffff",
-    textoSecundario: "#b8c2cc",
-    dourado: "#3fa9f5",
-    douradoClaro: "#75c7ff",
-    linha: "#334455",
+    fundo: "#0b0b0b",
+    card: "#151515",
+    card2: "#1d1d1d",
+    texto: "#f6f6f6",
+    textoSecundario: "#a5a5a5",
+    dourado: "#d8a84e",
+    douradoClaro: "#f0c66a",
+    linha: "#292929",
     servicoNome: "#ffffff"
 },
     
