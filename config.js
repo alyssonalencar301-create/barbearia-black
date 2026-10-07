@@ -10,7 +10,21 @@ const CONFIG = {
 
     endereco: "Rua Principal, 99 - Centro",
 
+    // ==========================================
+    // CORES
+    // ==========================================
 
+    cores: {
+        fundo: "#0b0b0b",
+        card: "#151515",
+        card2: "#1d1d1d",
+        texto: "#f6f6f6",
+        textoSecundario: "#a5a5a5",
+        dourado: "#d8a84e",
+        douradoClaro: "#f0c66a",
+        linha: "#292929"
+    },
+    
     // ==========================================
     // BARBEIROS
     // ==========================================
