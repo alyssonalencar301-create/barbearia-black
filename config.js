@@ -4,7 +4,7 @@ const CONFIG = {
     // IDENTIDADE DA BARBEARIA
     // ==========================================
 
-    nome: "Barbearia Black",
+    nome: "Barber Black",
 
     whatsapp: "(87) 99999-9999",
 
