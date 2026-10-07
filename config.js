@@ -4,7 +4,7 @@ const CONFIG = {
     // IDENTIDADE DA BARBEARIA
     // ==========================================
 
-   nome: "Barbearia Bruno",
+   nome: "Barbearia Black",
 
 whatsapp: "(87) 98888-7777",
 
