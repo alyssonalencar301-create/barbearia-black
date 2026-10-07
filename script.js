@@ -618,6 +618,15 @@ function generateTimes() {
 
     const times = [];
 
+    // Verifica o dia da semana
+    const dataSelecionada = new Date(state.date + "T00:00:00");
+    const diaSemana = dataSelecionada.getDay();
+
+    // Domingo = 0
+    if (diaSemana === 0) {
+        return times;
+    }
+
 
     for (
         let hour = OPEN_HOUR;
@@ -644,7 +653,6 @@ function generateTimes() {
     return times;
 
 }
-
 
 // ======================================================
 // BUSCAR HORÁRIOS OCUPADOS
