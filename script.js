@@ -96,6 +96,8 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("nomeBarbearia").textContent = CONFIG.nome.toUpperCase();
 document.getElementById("nomeBarbearia").textContent =
     CONFIG.nome.toUpperCase();
+    document.getElementById("sloganBarbearia").textContent =
+    CONFIG.slogan;
 
 document.getElementById("logoBarbearia").src =
     CONFIG.logo;
