@@ -53,5 +53,16 @@ const CONFIG = {
         descricao: "O combo completo",
         preco: 65
     }
-]
+],
+        // ==========================================
+    // HORÁRIO DE FUNCIONAMENTO
+    // ==========================================
+
+    horario: {
+        abertura: 8,
+        fechamento: 19,
+        intervalo: 30
+    }
+
+};
 };
