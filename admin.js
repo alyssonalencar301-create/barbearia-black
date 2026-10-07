@@ -11,8 +11,7 @@ const db = window.supabase.createClient(
             autoRefreshToken: true,
             storage: window.sessionStorage
         }
-    }
-    }
+    
 );
 
 // NOME DA BARBEARIA NA ABA DO NAVEGADOR
