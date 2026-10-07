@@ -40,9 +40,9 @@ const SERVICES = CONFIG.servicos.map(function(service) {
 // CONFIGURAÇÕES DE HORÁRIO
 // ======================================================
 
-const OPEN_HOUR = CONFIG.horario.abertura;
-const CLOSE_HOUR = CONFIG.horario.fechamento;
-const INTERVAL = CONFIG.horario.intervalo;
+const OPEN_HOUR = 8;
+const CLOSE_HOUR = 19;
+const INTERVAL = 30;
 
 
 // ======================================================
