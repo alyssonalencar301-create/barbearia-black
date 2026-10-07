@@ -30,7 +30,7 @@ const CONFIG = {
         id: "corte",
         nome: "Corte",
         descricao: "Corte tradicional ou moderno",
-        preco: 30
+        preco: 25
     },
 
     {
