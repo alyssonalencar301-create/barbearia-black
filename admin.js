@@ -492,7 +492,7 @@ async function excluirTodos() {
 async function sairDaAgenda() {
 
     await db.auth.signOut();
-
+sessionStorage.removeItem("adminLogado");
     mostrarLogin();
 
 }
