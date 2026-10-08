@@ -43,17 +43,8 @@ const adminDate = document.getElementById("adminDate");
 const adminList = document.getElementById("adminList");
 const adminBarber = document.getElementById("adminBarber");
 
-const totalAgendamentos =
-    document.getElementById("totalAgendamentos");
-
-const totalJoao =
-    document.getElementById("totalJoao");
-
-const totalPedro =
-    document.getElementById("totalPedro");
-
-const totalBruno =
-    document.getElementById("totalBruno");
+const agendaResumo =
+    document.getElementById("agendaResumo");
 
 const logoutAdmin = document.getElementById("logoutAdmin");
 const clearAll = document.getElementById("clearAll");
@@ -261,23 +252,46 @@ function definirDataHoje() {
 
 function atualizarResumo(agendamentos) {
 
-    totalAgendamentos.textContent =
-        agendamentos.length;
+    agendaResumo.innerHTML = "";
 
-    totalJoao.textContent =
-        agendamentos.filter(
-            a => a.barbeiro === "João"
-        ).length;
+    const total = agendamentos.length;
 
-    totalPedro.textContent =
-        agendamentos.filter(
-            a => a.barbeiro === "Pedro"
-        ).length;
+    const cardTotal = document.createElement("div");
 
-    totalBruno.textContent =
-        agendamentos.filter(
-            a => a.barbeiro === "Bruno"
-        ).length;
+    cardTotal.className = "resumo-item";
+
+    cardTotal.innerHTML = `
+        <strong>${total}</strong>
+        <span>Agendamentos</span>
+    `;
+
+    agendaResumo.appendChild(cardTotal);
+
+
+    CONFIG.barbeiros.forEach(function (barbeiro) {
+
+        const quantidade =
+            agendamentos.filter(function (agendamento) {
+
+                return agendamento.barbeiro === barbeiro;
+
+            }).length;
+
+
+        const card =
+            document.createElement("div");
+
+        card.className = "resumo-item";
+
+        card.innerHTML = `
+            <strong>${quantidade}</strong>
+            <span>${escaparHTML(barbeiro)}</span>
+        `;
+
+        agendaResumo.appendChild(card);
+
+    });
+
 }
 // ==========================================
 // CARREGAR AGENDA
