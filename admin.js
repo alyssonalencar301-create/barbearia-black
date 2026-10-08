@@ -192,7 +192,6 @@ async function fazerLogin(event) {
 sessionStorage.setItem("adminLogado", "true");
 
 mostrarPainel();
-    mostrarPainel();
 
 }
 
