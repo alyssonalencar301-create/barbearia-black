@@ -35,7 +35,6 @@ dourado: "#d8a84e",
     barbeiros: [
         "João",
         "Pedro",
-        "Bruno"
     ],
 
 
