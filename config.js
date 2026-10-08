@@ -12,7 +12,7 @@ const CONFIG = {
 heroTitulo2: "SEU HORÁRIo.",
 heroDescricao: "Escolha o serviço, o barbeiro e o melhor horário. Seu agendamento fica confirmado em poucos passos.",
 
-whatsapp: "(87) 98888-7777",
+whatsapp: "(87) 99189-6806",
 
 endereco: "Av. Central, 250 - Centro",
 
