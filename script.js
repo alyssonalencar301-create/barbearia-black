@@ -114,6 +114,14 @@ document.getElementById("logoBarbearia").src =
     CONFIG.logo;
 document.getElementById("nomeBarbeariaFooter").textContent = CONFIG.nome;
 document.getElementById("whatsappBarbearia").textContent = CONFIG.whatsapp;
+    let numeroWhatsApp = CONFIG.whatsapp.replace(/\D/g, "");
+
+if (numeroWhatsApp.length <= 11) {
+    numeroWhatsApp = "55" + numeroWhatsApp;
+}
+
+document.getElementById("whatsappLink").href =
+    "https://wa.me/" + numeroWhatsApp;
     document.getElementById("enderecoBarbearia").textContent = CONFIG.endereco;
     document.documentElement.style.setProperty("--bg", CONFIG.cores.fundo);
 document.documentElement.style.setProperty("--card", CONFIG.cores.card);
