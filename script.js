@@ -1175,10 +1175,42 @@ const linkWhatsApp =
 
     <br><br>
 
-    <small>
+        <small>
         Guarde este código.
         Ele será necessário para cancelar seu agendamento.
     </small>
+
+    <br><br>
+
+    <strong>
+        Confirme seu agendamento pelo WhatsApp
+    </strong>
+
+    <br>
+
+    <span>
+        ${CONFIG.whatsapp}
+    </span>
+
+    <br><br>
+
+    <a
+        href="${linkWhatsApp}"
+        target="_blank"
+        rel="noopener noreferrer"
+        style="
+            display:inline-block;
+            padding:12px 18px;
+            background:#25D366;
+            color:#fff;
+            text-decoration:none;
+            border-radius:8px;
+            font-weight:bold;
+        "
+    >
+        💬 Confirmar pelo WhatsApp
+    </a>
+`;
 `;
         
     document
