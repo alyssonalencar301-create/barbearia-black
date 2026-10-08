@@ -13,6 +13,8 @@ const db = window.supabase.createClient(
 document.title = "Agenda — " + CONFIG.nome;
 document.getElementById("nomeBarbeariaAdminFooter").textContent =
     CONFIG.nome;
+document.getElementById("logoBarbeariaAdmin").src =
+    CONFIG.logo;
 
 // CORES DA BARBEARIA
 
