@@ -65,9 +65,13 @@ h1 span{color:var(--gold)}.hero-text{max-width:570px;color:var(--muted);font-siz
     object-fit: contain;
     display: block;
 }
+/* ==========================================
+   RESUMO DA AGENDA
+========================================== */
+
 .agenda-resumo {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 12px;
     margin-top: 20px;
     margin-bottom: 20px;
@@ -86,11 +90,22 @@ h1 span{color:var(--gold)}.hero-text{max-width:570px;color:var(--muted);font-siz
     color: var(--gold);
     font-size: 28px;
     line-height: 1;
-    margin-bottom: 7px;
+    margin-bottom: 8px;
 }
 
 .resumo-item span {
     display: block;
     color: var(--muted);
-    font-size: 12px;
+    font-size: 13px;
+}
+
+
+/* CELULAR */
+
+@media (max-width: 700px) {
+
+    .agenda-resumo {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
 }
