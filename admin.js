@@ -43,6 +43,18 @@ const adminDate = document.getElementById("adminDate");
 const adminList = document.getElementById("adminList");
 const adminBarber = document.getElementById("adminBarber");
 
+const totalAgendamentos =
+    document.getElementById("totalAgendamentos");
+
+const totalJoao =
+    document.getElementById("totalJoao");
+
+const totalPedro =
+    document.getElementById("totalPedro");
+
+const totalBruno =
+    document.getElementById("totalBruno");
+
 const logoutAdmin = document.getElementById("logoutAdmin");
 const clearAll = document.getElementById("clearAll");
 
@@ -247,7 +259,26 @@ function definirDataHoje() {
 
 }
 
+function atualizarResumo(agendamentos) {
 
+    totalAgendamentos.textContent =
+        agendamentos.length;
+
+    totalJoao.textContent =
+        agendamentos.filter(
+            a => a.barbeiro === "João"
+        ).length;
+
+    totalPedro.textContent =
+        agendamentos.filter(
+            a => a.barbeiro === "Pedro"
+        ).length;
+
+    totalBruno.textContent =
+        agendamentos.filter(
+            a => a.barbeiro === "Bruno"
+        ).length;
+}
 // ==========================================
 // CARREGAR AGENDA
 // ==========================================
@@ -310,7 +341,8 @@ const {
         return;
     }
 
-
+atualizarResumo(data || []);
+    
     if (!data || data.length === 0) {
 
         adminList.innerHTML = `
