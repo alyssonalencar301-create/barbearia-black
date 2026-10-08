@@ -1089,7 +1089,53 @@ const { error } =
     // MOSTRAR SUCESSO
     // ----------------------------------------------
 
+// ----------------------------------------------
+// MOSTRAR SUCESSO
+// ----------------------------------------------
 
+// ----------------------------------------------
+// MENSAGEM DE CONFIRMAÇÃO PELO WHATSAPP
+// ----------------------------------------------
+
+let numeroWhatsApp = CONFIG.whatsapp.replace(/\D/g, "");
+
+if (numeroWhatsApp.length <= 11) {
+    numeroWhatsApp = "55" + numeroWhatsApp;
+}
+
+const mensagemWhatsApp =
+`* * * * 📆 MEU AGENDAMENTO * * * *
+
+👥 CLIENTE: *${nome}*
+📞 TELEFONE: ${whatsapp}
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+📌 DIA: ${formatDate(state.date)}
+⌚ HORÁRIO: ${state.time}
+
+💇🏽‍♂️ PROFISSIONAL
+${state.barber}
+
+✂️ SERVIÇO
+${state.service.name} - R$${state.service.price.toFixed(2).replace(".", ",")}
+
+💳 VALOR
+R$${state.service.price.toFixed(2).replace(".", ",")}
+
+✅ AGENDAMENTO REALIZADO COM SUCESSO`;
+
+const linkWhatsApp =
+    "https://wa.me/" +
+    numeroWhatsApp +
+    "?text=" +
+    encodeURIComponent(mensagemWhatsApp);
+
+
+const successText =
+    document.getElementById(
+        "successText"
+    );
 
     successText.innerHTML = `
     <strong>
@@ -1162,7 +1208,7 @@ const { error } =
         💬 Confirmar pelo WhatsApp
     </a>
 `;
-`;
+
         
     document
         .getElementById("successModal")
