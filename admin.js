@@ -274,16 +274,24 @@ async function carregarAgenda() {
     `;
 
 
-    const {
-        data,
-        error
-    } = await db
-        .from("agendamentos")
-        .select("*")
-        .eq("data", dataSelecionada)
-        .order("horario", {
-            ascending: true
-        });
+    const barbeiroSelecionado = adminBarber.value;
+
+let consulta = db
+    .from("agendamentos")
+    .select("*")
+    .eq("data", dataSelecionada);
+
+if (barbeiroSelecionado) {
+    consulta = consulta.eq("barbeiro", barbeiroSelecionado);
+}
+
+const {
+    data,
+    error
+} = await consulta
+    .order("horario", {
+        ascending: true
+    });
 
 
     if (error) {
