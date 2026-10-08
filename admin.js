@@ -41,6 +41,7 @@ const loginMessage = document.getElementById("loginMessage");
 
 const adminDate = document.getElementById("adminDate");
 const adminList = document.getElementById("adminList");
+const adminBarber = document.getElementById("adminBarber");
 
 const logoutAdmin = document.getElementById("logoutAdmin");
 const clearAll = document.getElementById("clearAll");
@@ -53,6 +54,16 @@ const clearAll = document.getElementById("clearAll");
 document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("nomeBarbeariaAdmin").textContent =
     CONFIG.nome.toUpperCase();
+    CONFIG.barbeiros.forEach(function (barbeiro) {
+
+    const option = document.createElement("option");
+
+    option.value = barbeiro;
+    option.textContent = barbeiro;
+
+    adminBarber.appendChild(option);
+
+});
 
    const {
     data: { session }
