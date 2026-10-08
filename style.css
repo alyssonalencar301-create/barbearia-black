@@ -65,3 +65,32 @@ h1 span{color:var(--gold)}.hero-text{max-width:570px;color:var(--muted);font-siz
     object-fit: contain;
     display: block;
 }
+.agenda-resumo {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.resumo-item {
+    background: var(--card2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+}
+
+.resumo-item strong {
+    display: block;
+    color: var(--gold);
+    font-size: 28px;
+    line-height: 1;
+    margin-bottom: 7px;
+}
+
+.resumo-item span {
+    display: block;
+    color: var(--muted);
+    font-size: 12px;
+}
