@@ -99,7 +99,10 @@ if (session && sessionStorage.getItem("adminLogado") === "true") {
         "change",
         carregarAgenda
     );
-
+adminBarber.addEventListener(
+    "change",
+    carregarAgenda
+);
 
     clearAll.addEventListener(
         "click",
